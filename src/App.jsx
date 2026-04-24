@@ -1,0 +1,115 @@
+import { Navigate, Route, Routes } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
+import AdminDashboard from "./features/admin/pages/Dashboard";
+import Department from "./features/admin/pages/Department";
+import Employee from "./features/admin/pages/Employee";
+import Attendance from "./features/admin/pages/Attendance";
+import LeaveManagement from "./features/admin/pages/LeaveManagement";
+import Payroll from "./features/admin/pages/Payroll";
+import Performance from "./features/admin/pages/Performance";
+import Recruitment from "./features/admin/pages/Recruitment";
+import ChangePasswordRequired from "./features/auth/pages/ChangePasswordRequired";
+import Login from "./features/auth/pages/Login";
+import EmployeeDashboard from "./features/employee/pages/Dashboard";
+import Profile from "./features/employee/pages/Profile";
+
+function App() {
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <Routes>
+      <Route
+        path="/login"
+        element={!user ? <Login /> : <Navigate to="/dashboard" />}
+      />
+      <Route
+        path="/change-password-required"
+        element={user ? <ChangePasswordRequired /> : <Navigate to="/login" />}
+      />
+      <Route
+        path="/employee/profile"
+        element={
+          user?.role === "employee" ? <Profile /> : <Navigate to="/dashboard" />
+        }
+      />
+      <Route
+        path="/admin/departments"
+        element={
+          user?.role === "admin" ? <Department /> : <Navigate to="/dashboard" />
+        }
+      />
+      <Route
+        path="/admin/employees"
+        element={
+          user?.role === "admin" ? <Employee /> : <Navigate to="/dashboard" />
+        }
+      />
+      <Route
+        path="/admin/attendance"
+        element={
+          user?.role === "admin" ? <Attendance /> : <Navigate to="/dashboard" />
+        }
+      />
+      <Route
+        path="/admin/leave-management"
+        element={
+          user?.role === "admin" ? (
+            <LeaveManagement />
+          ) : (
+            <Navigate to="/dashboard" />
+          )
+        }
+      />
+      <Route
+        path="/admin/payroll"
+        element={
+          user?.role === "admin" ? <Payroll /> : <Navigate to="/dashboard" />
+        }
+      />
+      <Route
+        path="/admin/performance"
+        element={
+          user?.role === "admin" ? (
+            <Performance />
+          ) : (
+            <Navigate to="/dashboard" />
+          )
+        }
+      />
+      <Route
+        path="/admin/recruitment"
+        element={
+          user?.role === "admin" ? (
+            <Recruitment />
+          ) : (
+            <Navigate to="/dashboard" />
+          )
+        }
+      />
+      <Route
+        path="/dashboard"
+        element={
+          user ? (
+            user.role === "admin" ? (
+              <AdminDashboard />
+            ) : (
+              <EmployeeDashboard />
+            )
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/"
+        element={<Navigate to={user ? "/dashboard" : "/login"} />}
+      />
+    </Routes>
+  );
+}
+
+export default App;
