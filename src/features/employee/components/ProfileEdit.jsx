@@ -119,9 +119,9 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value="">Select Gender</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-              <option value="Other">Other</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
             </select>
           </div>
           <div>
@@ -142,14 +142,16 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Work Location
             </label>
-            <input
-              type="text"
+            <select
               name="workLocation"
               value={formData.workLocation}
               onChange={handleChange}
-              placeholder="e.g., New York Office"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
+            >
+              <option value="">Select Work Location</option>
+              <option value="office">Office</option>
+              <option value="remote">Remote</option>
+            </select>
           </div>
         </div>
       </div>

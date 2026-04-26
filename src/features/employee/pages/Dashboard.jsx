@@ -63,7 +63,10 @@ const EmployeeDashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-white overflow-hidden shadow rounded-lg cursor-pointer hover:shadow-lg transition transform hover:-translate-y-1">
+            <div
+              onClick={() => navigate("/employee/attendance")}
+              className="bg-white overflow-hidden shadow rounded-lg cursor-pointer hover:shadow-lg transition transform hover:-translate-y-1"
+            >
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
@@ -84,7 +87,10 @@ const EmployeeDashboard = () => {
                 </div>
               </div>
             </div>
-            <div className="bg-white overflow-hidden shadow rounded-lg cursor-pointer hover:shadow-lg transition transform hover:-translate-y-1">
+            <div
+              onClick={() => navigate("/employee/leave")}
+              className="bg-white overflow-hidden shadow rounded-lg cursor-pointer hover:shadow-lg transition transform hover:-translate-y-1"
+            >
               <div className="p-5">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">

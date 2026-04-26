@@ -11,7 +11,9 @@ import Performance from "./features/admin/pages/Performance";
 import Recruitment from "./features/admin/pages/Recruitment";
 import ChangePasswordRequired from "./features/auth/pages/ChangePasswordRequired";
 import Login from "./features/auth/pages/Login";
+import EmployeeAttendance from "./features/employee/pages/Attendance";
 import EmployeeDashboard from "./features/employee/pages/Dashboard";
+import EmployeeLeave from "./features/employee/pages/Leave";
 import Profile from "./features/employee/pages/Profile";
 
 function App() {
@@ -35,6 +37,26 @@ function App() {
         path="/employee/profile"
         element={
           user?.role === "employee" ? <Profile /> : <Navigate to="/dashboard" />
+        }
+      />
+      <Route
+        path="/employee/attendance"
+        element={
+          user?.role === "employee" ? (
+            <EmployeeAttendance />
+          ) : (
+            <Navigate to="/dashboard" />
+          )
+        }
+      />
+      <Route
+        path="/employee/leave"
+        element={
+          user?.role === "employee" ? (
+            <EmployeeLeave />
+          ) : (
+            <Navigate to="/dashboard" />
+          )
         }
       />
       <Route

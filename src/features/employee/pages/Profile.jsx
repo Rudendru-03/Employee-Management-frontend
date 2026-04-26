@@ -41,12 +41,19 @@ const Profile = () => {
       const updateData = { ...formData };
       const photoUrl = updateData.photoUrl;
       delete updateData.photoUrl;
+      Object.keys(updateData).forEach((key) => {
+        if (updateData[key] === '') {
+          delete updateData[key];
+        }
+      });
 
       // Update profile
-      await employeeService.updateProfile(updateData);
+      if (Object.keys(updateData).length > 0) {
+        await employeeService.updateProfile(updateData);
+      }
 
       // Upload photo if it was changed
-      if (photoUrl && photoUrl.startsWith('data:')) {
+      if (photoUrl && !photoUrl.startsWith('data:') && photoUrl !== employee?.photoUrl) {
         await employeeService.uploadPhoto(photoUrl);
       }
 
