@@ -1,22 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import axios from "axios";
+import apiClient from "../lib/apiClient";
 
 const AuthContext = createContext();
-
-// Configure axios to send cookies with requests
-axios.defaults.withCredentials = true;
-
-// Add request interceptor to include Authorization header
-axios.interceptors.request.use(
-  (config) => {
-    const token = localStorage.getItem("accessToken");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => Promise.reject(error)
-);
 
 export const useAuth = () => {
   return useContext(AuthContext);
@@ -40,7 +25,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post("/api/auth/login", { email, password });
+      const response = await apiClient.post("/auth/login", { email, password });
       const { accessToken, mustChangePassword: mustChange } = response.data;
       
       // Decode token to get email and role
@@ -61,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const logout = () => {
+  const clearSession = () => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("email");
     localStorage.removeItem("role");
@@ -69,12 +54,20 @@ export const AuthProvider = ({ children }) => {
     setMustChangePassword(false);
   };
 
+  const logout = async () => {
+    try {
+      await apiClient.post("/auth/logout");
+    } finally {
+      clearSession();
+    }
+  };
+
   const changePassword = async (oldPassword, newPassword) => {
     try {
-      await axios.post(
-        "/api/auth/change-password",
-        { oldPassword, newPassword },
-      );
+      await apiClient.post("/auth/change-password", {
+        currentPassword: oldPassword,
+        newPassword,
+      });
       setMustChangePassword(false);
     } catch (error) {
       const errorMessage = error.response?.data?.message || error.message || "Failed to change password";

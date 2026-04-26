@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DepartmentForm from '../components/DepartmentForm';
 import DepartmentList from '../components/DepartmentList';
@@ -15,8 +15,11 @@ const Department = () => {
   const [success, setSuccess] = useState('');
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingDepartment, setEditingDepartment] = useState(null);
+  const hasFetchedInitialData = useRef(false);
 
   useEffect(() => {
+    if (hasFetchedInitialData.current) return;
+    hasFetchedInitialData.current = true;
     fetchData();
   }, []);
 

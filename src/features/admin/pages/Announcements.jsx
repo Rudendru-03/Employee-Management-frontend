@@ -1,15 +1,16 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import PayrollFilters from "../components/PayrollFilters";
-import PayrollForm from "../components/PayrollForm";
-import PayrollPagination from "../components/PayrollPagination";
-import PayrollTable from "../components/PayrollTable";
-import { payrollService } from "../services/payrollService";
-import { userService } from "../services/userService";
+import AnnouncementFilters from "../components/AnnouncementFilters";
+import AnnouncementForm from "../components/AnnouncementForm";
+import AnnouncementPagination from "../components/AnnouncementPagination";
+import AnnouncementTable from "../components/AnnouncementTable";
+import { announcementService } from "../services/announcementService";
+import { departmentService } from "../services/departmentService";
 
 const defaultFilters = {
-  userId: "",
-  month: "",
+  title: "",
+  target: "",
+  department: "",
 };
 
 const defaultPagination = {
@@ -19,13 +20,6 @@ const defaultPagination = {
   hasNext: false,
   hasPrev: false,
 };
-
-const money = (value) =>
-  new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: "INR",
-    maximumFractionDigits: 0,
-  }).format(Number(value || 0));
 
 const buildQuery = (filters, offset) => {
   const query = {
@@ -40,10 +34,10 @@ const buildQuery = (filters, offset) => {
   return query;
 };
 
-const Payroll = () => {
+const Announcements = () => {
   const navigate = useNavigate();
-  const [payrolls, setPayrolls] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
+  const [departments, setDepartments] = useState([]);
   const [filters, setFilters] = useState(defaultFilters);
   const [pagination, setPagination] = useState(defaultPagination);
   const [offset, setOffset] = useState(0);
@@ -52,45 +46,44 @@ const Payroll = () => {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingPayroll, setEditingPayroll] = useState(null);
+  const [editingAnnouncement, setEditingAnnouncement] = useState(null);
   const lastFetchKey = useRef("");
-  const hasFetchedUsers = useRef(false);
+  const hasFetchedDepartments = useRef(false);
 
   const summary = useMemo(() => {
-    return payrolls.reduce(
-      (acc, payroll) => {
-        acc.basicSalary += Number(payroll.basicSalary || 0);
-        acc.bonus += Number(payroll.bonus || 0);
-        acc.deductions += Number(payroll.deductions || 0);
-        acc.netSalary += Number(payroll.netSalary || 0);
+    return announcements.reduce(
+      (acc, announcement) => {
+        acc[announcement.target] = (acc[announcement.target] || 0) + 1;
         return acc;
       },
-      { basicSalary: 0, bonus: 0, deductions: 0, netSalary: 0 },
+      { all: 0, employee: 0, department: 0 },
     );
-  }, [payrolls]);
+  }, [announcements]);
 
-  const fetchPayrolls = async (nextFilters = filters, nextOffset = offset) => {
+  const fetchAnnouncements = async (nextFilters = filters, nextOffset = offset) => {
     try {
       setLoading(true);
       setError("");
-      const result = await payrollService.getPayrolls(buildQuery(nextFilters, nextOffset));
-      setPayrolls(result.data);
+      const result = await announcementService.getAnnouncements(
+        buildQuery(nextFilters, nextOffset),
+      );
+      setAnnouncements(result.data);
       setPagination(result.pagination);
     } catch (err) {
-      setError(err.message || "Failed to load payroll records");
-      console.error("Error fetching payrolls:", err);
+      setError(err.message || "Failed to load announcements");
+      console.error("Error fetching announcements:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchUsers = async () => {
+  const fetchDepartments = async () => {
     try {
-      const usersData = await userService.getAllUsers();
-      setUsers(usersData);
+      const departmentsData = await departmentService.getAllDepartments();
+      setDepartments(departmentsData);
     } catch (err) {
-      setError(err.message || "Failed to load users");
-      console.error("Error fetching users:", err);
+      setError(err.message || "Failed to load departments");
+      console.error("Error fetching departments:", err);
     }
   };
 
@@ -98,13 +91,13 @@ const Payroll = () => {
     const fetchKey = JSON.stringify({ filters, offset });
     if (lastFetchKey.current === fetchKey) return;
     lastFetchKey.current = fetchKey;
-    fetchPayrolls(filters, offset);
+    fetchAnnouncements(filters, offset);
   }, [filters, offset]);
 
   useEffect(() => {
-    if (hasFetchedUsers.current) return;
-    hasFetchedUsers.current = true;
-    fetchUsers();
+    if (hasFetchedDepartments.current) return;
+    hasFetchedDepartments.current = true;
+    fetchDepartments();
   }, []);
 
   const handleFiltersChange = (nextFilters) => {
@@ -118,19 +111,19 @@ const Payroll = () => {
   };
 
   const handleAddNew = () => {
-    setEditingPayroll(null);
+    setEditingAnnouncement(null);
     setIsFormOpen(true);
     setError("");
   };
 
-  const handleEdit = (payroll) => {
-    setEditingPayroll(payroll);
+  const handleEdit = (announcement) => {
+    setEditingAnnouncement(announcement);
     setIsFormOpen(true);
     setError("");
   };
 
   const handleCancel = () => {
-    setEditingPayroll(null);
+    setEditingAnnouncement(null);
     setIsFormOpen(false);
     setError("");
   };
@@ -141,28 +134,28 @@ const Payroll = () => {
       setError("");
       setSuccess("");
 
-      if (editingPayroll) {
-        await payrollService.updatePayroll(editingPayroll._id, formData);
-        setSuccess("Payroll updated successfully!");
+      if (editingAnnouncement) {
+        await announcementService.updateAnnouncement(editingAnnouncement._id, formData);
+        setSuccess("Announcement updated successfully!");
       } else {
-        await payrollService.createPayroll(formData);
-        setSuccess("Payroll created successfully!");
+        await announcementService.createAnnouncement(formData);
+        setSuccess("Announcement published successfully!");
       }
 
-      setEditingPayroll(null);
+      setEditingAnnouncement(null);
       setIsFormOpen(false);
-      await fetchPayrolls(filters, offset);
+      await fetchAnnouncements(filters, offset);
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      setError(err.message || "Failed to save payroll");
-      console.error("Error saving payroll:", err);
+      setError(err.message || "Failed to save announcement");
+      console.error("Error saving announcement:", err);
     } finally {
       setSaving(false);
     }
   };
 
-  const handleDelete = async (payroll) => {
-    if (!window.confirm(`Delete payroll for ${payroll.userId?.email || "this employee"}?`)) {
+  const handleDelete = async (announcement) => {
+    if (!window.confirm(`Delete "${announcement.title}"?`)) {
       return;
     }
 
@@ -170,13 +163,13 @@ const Payroll = () => {
       setSaving(true);
       setError("");
       setSuccess("");
-      await payrollService.deletePayroll(payroll._id);
-      setSuccess("Payroll deleted successfully!");
-      await fetchPayrolls(filters, offset);
+      await announcementService.deleteAnnouncement(announcement._id);
+      setSuccess("Announcement deleted successfully!");
+      await fetchAnnouncements(filters, offset);
       setTimeout(() => setSuccess(""), 3000);
     } catch (err) {
-      setError(err.message || "Failed to delete payroll");
-      console.error("Error deleting payroll:", err);
+      setError(err.message || "Failed to delete announcement");
+      console.error("Error deleting announcement:", err);
     } finally {
       setSaving(false);
     }
@@ -189,16 +182,16 @@ const Payroll = () => {
           <div>
             <button
               onClick={() => navigate("/dashboard")}
-              className="mb-4 inline-flex items-center font-medium text-rose-700 hover:text-rose-900"
+              className="mb-4 inline-flex items-center font-medium text-cyan-700 hover:text-cyan-900"
             >
               <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
               Back to Dashboard
             </button>
-            <h1 className="text-4xl font-bold text-gray-900">Payroll Management</h1>
+            <h1 className="text-4xl font-bold text-gray-900">Announcements</h1>
             <p className="mt-2 text-gray-600">
-              Create salary records, track bonuses and deductions, and review monthly payouts.
+              Publish company updates and target them to everyone, employees, or departments.
             </p>
           </div>
 
@@ -206,35 +199,29 @@ const Payroll = () => {
             <button
               onClick={handleAddNew}
               disabled={loading}
-              className="rounded-lg bg-rose-600 px-6 py-3 font-semibold text-white transition hover:bg-rose-700 disabled:opacity-50"
+              className="rounded-lg bg-cyan-600 px-6 py-3 font-semibold text-white transition hover:bg-cyan-700 disabled:opacity-50"
             >
-              + Create Payroll
+              + Create Announcement
             </button>
           )}
         </div>
 
         <div className="mb-6 grid gap-4 md:grid-cols-4">
           <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Visible Records</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900">{payrolls.length}</p>
+            <p className="text-sm font-medium text-gray-500">Visible Posts</p>
+            <p className="mt-2 text-3xl font-bold text-gray-900">{announcements.length}</p>
           </div>
           <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Gross Salary</p>
-            <p className="mt-2 text-2xl font-bold text-gray-900">
-              {money(summary.basicSalary + summary.bonus)}
-            </p>
+            <p className="text-sm font-medium text-gray-500">All Company</p>
+            <p className="mt-2 text-3xl font-bold text-cyan-700">{summary.all}</p>
           </div>
           <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Deductions</p>
-            <p className="mt-2 text-2xl font-bold text-red-700">
-              {money(summary.deductions)}
-            </p>
+            <p className="text-sm font-medium text-gray-500">Employees</p>
+            <p className="mt-2 text-3xl font-bold text-sky-700">{summary.employee}</p>
           </div>
           <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Net Payout</p>
-            <p className="mt-2 text-2xl font-bold text-green-700">
-              {money(summary.netSalary)}
-            </p>
+            <p className="text-sm font-medium text-gray-500">Departments</p>
+            <p className="mt-2 text-3xl font-bold text-violet-700">{summary.department}</p>
           </div>
         </div>
 
@@ -252,18 +239,18 @@ const Payroll = () => {
 
         <div className="space-y-6">
           {isFormOpen ? (
-            <PayrollForm
-              users={users}
-              initialData={editingPayroll}
+            <AnnouncementForm
+              departments={departments}
+              initialData={editingAnnouncement}
               loading={saving}
               onCancel={handleCancel}
               onSubmit={handleSubmit}
             />
           ) : (
             <>
-              <PayrollFilters
+              <AnnouncementFilters
+                departments={departments}
                 filters={filters}
-                users={users}
                 loading={loading}
                 onChange={handleFiltersChange}
                 onReset={handleResetFilters}
@@ -271,19 +258,19 @@ const Payroll = () => {
 
               {loading ? (
                 <div className="rounded-lg bg-white py-12 text-center shadow">
-                  <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-rose-600"></div>
-                  <p className="mt-4 font-medium text-gray-600">Loading payroll records...</p>
+                  <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-cyan-600"></div>
+                  <p className="mt-4 font-medium text-gray-600">Loading announcements...</p>
                 </div>
               ) : (
                 <>
-                  <PayrollTable
-                    payrolls={payrolls}
+                  <AnnouncementTable
+                    announcements={announcements}
                     loading={saving}
                     onAddNew={handleAddNew}
-                    onEdit={handleEdit}
                     onDelete={handleDelete}
+                    onEdit={handleEdit}
                   />
-                  <PayrollPagination
+                  <AnnouncementPagination
                     pagination={pagination}
                     loading={loading}
                     onPageChange={setOffset}
@@ -298,4 +285,4 @@ const Payroll = () => {
   );
 };
 
-export default Payroll;
+export default Announcements;

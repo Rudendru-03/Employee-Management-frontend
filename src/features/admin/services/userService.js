@@ -1,13 +1,13 @@
-import axios from "axios";
+import apiClient from "../../../lib/apiClient";
 
-const API_BASE_URL = "/api/admin";
+const getListData = (response) => response.data?.data || response.data || [];
 
 export const userService = {
   // Get all users
   getAllUsers: async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/users`);
-      return response.data;
+      const response = await apiClient.get("/admin/users");
+      return getListData(response);
     } catch (error) {
       throw error.response?.data || error.message;
     }
@@ -16,7 +16,7 @@ export const userService = {
   // Get single user
   getUserById: async (id) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/users/${id}`);
+      const response = await apiClient.get(`/admin/users/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -26,7 +26,7 @@ export const userService = {
   // Create user
   createUser: async (data) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/users`, data);
+      const response = await apiClient.post("/admin/users", data);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -36,7 +36,7 @@ export const userService = {
   // Update user
   updateUser: async (id, data) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/users/${id}`, data);
+      const response = await apiClient.put(`/admin/users/${id}`, data);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -46,7 +46,7 @@ export const userService = {
   // Delete user
   deleteUser: async (id) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/users/${id}`);
+      const response = await apiClient.delete(`/admin/users/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -56,7 +56,7 @@ export const userService = {
   // Update user status
   updateUserStatus: async (id, status) => {
     try {
-      const response = await axios.patch(`${API_BASE_URL}/users/${id}/status`, {
+      const response = await apiClient.patch(`/admin/users/${id}/status`, {
         status,
       });
       return response.data;
@@ -70,8 +70,8 @@ export const employeeService = {
   // Get all employees
   getAllEmployees: async () => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/employees`);
-      return response.data;
+      const response = await apiClient.get("/admin/employees");
+      return getListData(response);
     } catch (error) {
       throw error.response?.data || error.message;
     }
@@ -80,7 +80,7 @@ export const employeeService = {
   // Get single employee
   getEmployeeById: async (id) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/employees/${id}`);
+      const response = await apiClient.get(`/admin/employees/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -90,7 +90,7 @@ export const employeeService = {
   // Create employee
   createEmployee: async (data) => {
     try {
-      const response = await axios.post(`${API_BASE_URL}/employees`, data);
+      const response = await apiClient.post("/admin/employees", data);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -100,7 +100,7 @@ export const employeeService = {
   // Update employee
   updateEmployee: async (id, data) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/employees/${id}`, data);
+      const response = await apiClient.put(`/admin/employees/${id}`, data);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -110,7 +110,7 @@ export const employeeService = {
   // Delete employee
   deleteEmployee: async (id) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/employees/${id}`);
+      const response = await apiClient.delete(`/admin/employees/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;

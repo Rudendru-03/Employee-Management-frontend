@@ -125,6 +125,31 @@ export const adminModules = [
     },
   },
   {
+    key: "announcements",
+    title: "Announcements",
+    subtitle: "Publish team updates",
+    description:
+      "Create company-wide, employee, and department-specific announcements for the portal.",
+    route: "/admin/announcements",
+    badge: "N",
+    accent: "bg-cyan-600",
+    stats: ["Company updates", "Department notices", "Targeted messaging"],
+    placeholder: {
+      hero:
+        "Announcements are connected to the API and ready for publishing portal updates.",
+      sections: [
+        {
+          title: "What Admin Can Do",
+          items: ["Create announcements", "Target departments", "Edit and remove notices"],
+        },
+        {
+          title: "Employee Visibility",
+          items: ["Company-wide messages", "Employee notices", "Department-specific updates"],
+        },
+      ],
+    },
+  },
+  {
     key: "performance",
     title: "Performance",
     subtitle: "Monitor employee performance",

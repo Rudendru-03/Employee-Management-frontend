@@ -4,6 +4,7 @@ import AdminDashboard from "./features/admin/pages/Dashboard";
 import Department from "./features/admin/pages/Department";
 import Employee from "./features/admin/pages/Employee";
 import Attendance from "./features/admin/pages/Attendance";
+import Announcements from "./features/admin/pages/Announcements";
 import LeaveManagement from "./features/admin/pages/LeaveManagement";
 import Payroll from "./features/admin/pages/Payroll";
 import Performance from "./features/admin/pages/Performance";
@@ -52,6 +53,16 @@ function App() {
         path="/admin/attendance"
         element={
           user?.role === "admin" ? <Attendance /> : <Navigate to="/dashboard" />
+        }
+      />
+      <Route
+        path="/admin/announcements"
+        element={
+          user?.role === "admin" ? (
+            <Announcements />
+          ) : (
+            <Navigate to="/dashboard" />
+          )
         }
       />
       <Route

@@ -1,13 +1,13 @@
-import axios from "axios";
+import apiClient from "../../../lib/apiClient";
 
-const API_BASE_URL = "/api/departments";
+const getListData = (response) => response.data?.data || response.data || [];
 
 export const departmentService = {
   // Get all departments
   getAllDepartments: async () => {
     try {
-      const response = await axios.get(API_BASE_URL);
-      return response.data;
+      const response = await apiClient.get("/departments");
+      return getListData(response);
     } catch (error) {
       throw error.response?.data || error.message;
     }
@@ -16,7 +16,7 @@ export const departmentService = {
   // Get single department
   getDepartmentById: async (id) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/${id}`);
+      const response = await apiClient.get(`/departments/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -26,7 +26,7 @@ export const departmentService = {
   // Create department
   createDepartment: async (data) => {
     try {
-      const response = await axios.post(API_BASE_URL, data);
+      const response = await apiClient.post("/departments", data);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -36,7 +36,7 @@ export const departmentService = {
   // Update department
   updateDepartment: async (id, data) => {
     try {
-      const response = await axios.put(`${API_BASE_URL}/${id}`, data);
+      const response = await apiClient.put(`/departments/${id}`, data);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
@@ -46,7 +46,7 @@ export const departmentService = {
   // Delete department
   deleteDepartment: async (id) => {
     try {
-      const response = await axios.delete(`${API_BASE_URL}/${id}`);
+      const response = await apiClient.delete(`/departments/${id}`);
       return response.data;
     } catch (error) {
       throw error.response?.data || error.message;
