@@ -16,4 +16,16 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error),
 );
 
+// Add response interceptor to handle token expiration (401 errors)
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      // Dispatch a custom event to notify the application of authentication failure
+      window.dispatchEvent(new Event("auth:logout"));
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default apiClient;

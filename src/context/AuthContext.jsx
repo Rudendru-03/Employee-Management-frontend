@@ -21,6 +21,19 @@ export const AuthProvider = ({ children }) => {
       setUser({ email: storedEmail, role: storedRole });
     }
     setLoading(false);
+    const handleAuthLogout = () => {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("email");
+      localStorage.removeItem("role");
+      setUser(null);
+      setMustChangePassword(false);
+    };
+
+    window.addEventListener("auth:logout", handleAuthLogout);
+
+    return () => {
+      window.removeEventListener("auth:logout", handleAuthLogout);
+    };
   }, []);
 
   const login = async (email, password) => {
