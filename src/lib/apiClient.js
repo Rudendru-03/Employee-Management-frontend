@@ -1,7 +1,9 @@
 import axios from "axios";
 
 const apiClient = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "/api",
+  baseURL: import.meta.env.PROD 
+    ? "https://employee-management-pvs3.onrender.com/api" 
+    : import.meta.env.VITE_API_BASE_URL || "/api",
   withCredentials: true,
 });
 
