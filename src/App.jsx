@@ -9,6 +9,7 @@ import LeaveManagement from "./features/admin/pages/LeaveManagement";
 import Payroll from "./features/admin/pages/Payroll";
 import Performance from "./features/admin/pages/Performance";
 import Recruitment from "./features/admin/pages/Recruitment";
+import DemoPage from "./features/admin/pages/DemoPage";
 import ChangePasswordRequired from "./features/auth/pages/ChangePasswordRequired";
 import Login from "./features/auth/pages/Login";
 import EmployeeAttendance from "./features/employee/pages/Attendance";
@@ -20,11 +21,21 @@ function App() {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          <p className="mt-4 text-muted-light font-medium">Loading application...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <Routes>
+      {/* Demo route - no auth required */}
+      <Route path="/demo" element={<DemoPage />} />
+      
       <Route
         path="/login"
         element={!user ? <Login /> : <Navigate to="/dashboard" />}
