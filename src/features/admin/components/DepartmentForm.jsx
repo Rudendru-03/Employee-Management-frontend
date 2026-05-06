@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, Building2, User } from 'lucide-react';
 
 const DepartmentForm = ({ onSubmit, onCancel, loading, initialData = null, managers = [] }) => {
   const [formData, setFormData] = useState({
@@ -47,32 +47,35 @@ const DepartmentForm = ({ onSubmit, onCancel, loading, initialData = null, manag
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6 fade-in">
       {/* Department Name */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-card-foreground">
-          Department Name
-        </label>
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <Building2 className="w-4 h-4 text-primary" />
+          <label className="block text-sm font-semibold text-foreground">
+            Department Name <span className="text-danger">*</span>
+          </label>
+        </div>
         <input
           type="text"
           name="name"
           value={formData.name}
           onChange={handleChange}
           placeholder="e.g., Engineering, Sales, Marketing"
-          className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder-muted focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
+          className="w-full px-4 py-3 bg-background/50 border border-border rounded-xl text-foreground placeholder-muted focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition hover:border-border/80"
         />
         {errors.name && (
-          <div className="flex items-center gap-2 text-danger text-sm">
-            <AlertCircle className="w-4 h-4" />
+          <div className="flex items-center gap-2 text-danger text-sm bg-danger/5 p-2.5 rounded-lg border border-danger/20">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
             {errors.name}
           </div>
         )}
       </div>
 
       {/* Description */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-card-foreground">
-          Description
+      <div className="space-y-3">
+        <label className="block text-sm font-semibold text-foreground">
+          Description <span className="text-danger">*</span>
         </label>
         <textarea
           name="description"
@@ -80,26 +83,29 @@ const DepartmentForm = ({ onSubmit, onCancel, loading, initialData = null, manag
           onChange={handleChange}
           placeholder="Brief description of the department and its responsibilities"
           rows="4"
-          className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground placeholder-muted focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition resize-none"
+          className="w-full px-4 py-3 bg-background/50 border border-border rounded-xl text-foreground placeholder-muted focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition resize-none hover:border-border/80"
         />
         {errors.description && (
-          <div className="flex items-center gap-2 text-danger text-sm">
-            <AlertCircle className="w-4 h-4" />
+          <div className="flex items-center gap-2 text-danger text-sm bg-danger/5 p-2.5 rounded-lg border border-danger/20">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
             {errors.description}
           </div>
         )}
       </div>
 
       {/* Manager Selection */}
-      <div className="space-y-2">
-        <label className="block text-sm font-semibold text-card-foreground">
-          Department Manager
-        </label>
+      <div className="space-y-3">
+        <div className="flex items-center gap-2">
+          <User className="w-4 h-4 text-accent-secondary" />
+          <label className="block text-sm font-semibold text-foreground">
+            Department Manager <span className="text-danger">*</span>
+          </label>
+        </div>
         <select
           name="manager"
           value={formData.manager}
           onChange={handleChange}
-          className="w-full px-4 py-2.5 bg-background border border-border rounded-lg text-foreground focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition"
+          className="w-full px-4 py-3 bg-background/50 border border-border rounded-xl text-foreground focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition hover:border-border/80 appearance-none cursor-pointer"
         >
           <option value="">Select a manager</option>
           {managers.map(manager => (
@@ -109,19 +115,19 @@ const DepartmentForm = ({ onSubmit, onCancel, loading, initialData = null, manag
           ))}
         </select>
         {errors.manager && (
-          <div className="flex items-center gap-2 text-danger text-sm">
-            <AlertCircle className="w-4 h-4" />
+          <div className="flex items-center gap-2 text-danger text-sm bg-danger/5 p-2.5 rounded-lg border border-danger/20">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
             {errors.manager}
           </div>
         )}
       </div>
 
       {/* Actions */}
-      <div className="flex gap-3 pt-4">
+      <div className="flex gap-3 pt-6 border-t border-border/30">
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-4 py-2.5 bg-primary hover:bg-primary-dark text-white rounded-lg font-medium transition disabled:opacity-50"
+          className="flex-1 px-4 py-3 bg-gradient-to-r from-primary to-primary-light hover:from-primary-dark hover:to-primary text-white rounded-xl font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg hover:shadow-glow-blue"
         >
           {loading ? 'Saving...' : (initialData ? 'Update Department' : 'Create Department')}
         </button>
@@ -129,7 +135,7 @@ const DepartmentForm = ({ onSubmit, onCancel, loading, initialData = null, manag
           type="button"
           onClick={onCancel}
           disabled={loading}
-          className="flex-1 px-4 py-2.5 bg-background border border-border text-foreground hover:bg-background/80 rounded-lg font-medium transition disabled:opacity-50"
+          className="flex-1 px-4 py-3 bg-background/80 border border-border/50 text-foreground hover:bg-background hover:border-border rounded-xl font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Cancel
         </button>

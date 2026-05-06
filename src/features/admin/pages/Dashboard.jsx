@@ -39,42 +39,54 @@ const AdminDashboard = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur">
+      <header className="border-b border-border bg-card/50 backdrop-blur sticky top-0 z-40">
         <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div className="slide-up">
+          {/* Main Header Row */}
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+            {/* Left Side - Title and Description */}
+            <div className="slide-up min-w-0">
               <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 rounded-full text-xs font-semibold text-primary mb-3">
                 <TrendingUp className="w-4 h-4" />
                 Administration Panel
               </div>
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground truncate">
                 Admin Dashboard
               </h1>
-              <p className="mt-2 text-muted-light max-w-2xl">
+              <p className="mt-2 text-muted-light text-sm md:text-base max-w-2xl">
                 Manage your organization, track performance, and monitor key metrics all in one place.
               </p>
             </div>
 
-            <div className="flex flex-col gap-2 sm:gap-3">
-              <div className="rounded-lg bg-background border border-border px-4 py-3 text-sm flex items-center gap-2">
-                <Users className="w-4 h-4 text-primary" />
-                <span className="text-muted-light">Welcome,</span>
-                <span className="font-semibold text-foreground">{user?.email}</span>
+            {/* Right Side - User Info and Actions */}
+            <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto lg:flex-col xl:flex-row xl:gap-4">
+              {/* Welcome Info */}
+              <div className="rounded-lg bg-gradient-to-r from-primary/10 to-accent-secondary/10 border border-primary/20 px-4 py-3 flex items-center gap-3 min-w-0">
+                <div className="flex-shrink-0 p-2 rounded-full bg-primary/20">
+                  <Users className="w-4 h-4 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-light">Welcome</p>
+                  <p className="font-semibold text-foreground truncate text-sm">{user?.email}</p>
+                </div>
               </div>
-              <div className="flex gap-2">
+
+              {/* Action Buttons */}
+              <div className="flex gap-2 flex-shrink-0">
                 <button
                   onClick={() => setShowChangePassword(true)}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-accent-secondary/20 hover:bg-accent-secondary/30 border border-accent-secondary/30 text-accent-secondary rounded-lg font-medium transition"
+                  className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 bg-accent-secondary/20 hover:bg-accent-secondary/30 border border-accent-secondary/30 text-accent-secondary rounded-lg font-medium transition duration-200 whitespace-nowrap text-sm hover:shadow-glow-purple"
+                  title="Change Password"
                 >
-                  <Lock className="w-4 h-4" />
-                  Change Password
+                  <Lock className="w-4 h-4 flex-shrink-0" />
+                  <span className="hidden sm:inline">Change Password</span>
                 </button>
                 <button
                   onClick={logout}
-                  className="flex items-center gap-2 px-4 py-2.5 bg-danger/20 hover:bg-danger/30 border border-danger/30 text-danger rounded-lg font-medium transition"
+                  className="flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 bg-danger/20 hover:bg-danger/30 border border-danger/30 text-danger rounded-lg font-medium transition duration-200 whitespace-nowrap text-sm hover:shadow-glow-blue"
+                  title="Logout"
                 >
-                  <LogOut className="w-4 h-4" />
-                  Logout
+                  <LogOut className="w-4 h-4 flex-shrink-0" />
+                  <span className="hidden sm:inline">Logout</span>
                 </button>
               </div>
             </div>
@@ -87,24 +99,24 @@ const AdminDashboard = () => {
         {/* Quick Stats */}
         <div className="grid gap-4 md:grid-cols-4 mb-8">
           {[
-            { label: "Total Employees", value: "248", icon: "👥", trend: "+12" },
-            { label: "Departments", value: "12", icon: "🏢", trend: "+2" },
-            { label: "Present Today", value: "223", icon: "✓", trend: "89.9%" },
-            { label: "Pending Leaves", value: "15", icon: "📅", trend: "-3" },
+            { label: "Total Employees", value: "248", icon: "👥", trend: "+12", color: "from-primary" },
+            { label: "Departments", value: "12", icon: "🏢", trend: "+2", color: "from-accent-secondary" },
+            { label: "Present Today", value: "223", icon: "✓", trend: "89.9%", color: "from-success" },
+            { label: "Pending Leaves", value: "15", icon: "📅", trend: "-3", color: "from-warning" },
           ].map((stat, idx) => (
             <div
               key={idx}
-              className="bg-card border border-border rounded-xl p-6 hover:border-primary/50 transition group slide-up"
+              className={`bg-gradient-to-br ${stat.color}/5 to-card border border-border/50 rounded-xl p-6 hover:border-${stat.color}/50 hover:shadow-lg transition-all group slide-up backdrop-blur-sm`}
               style={{ animationDelay: `${idx * 100}ms` }}
             >
-              <div className="flex items-start justify-between">
-                <div>
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 flex-1">
                   <p className="text-muted text-sm font-medium">{stat.label}</p>
-                  <p className="text-3xl font-bold text-foreground mt-2">{stat.value}</p>
+                  <p className="text-4xl font-bold text-foreground mt-2 group-hover:text-primary transition">{stat.value}</p>
                 </div>
-                <div className="text-3xl">{stat.icon}</div>
+                <div className={`text-4xl flex-shrink-0 group-hover:scale-110 transition transform`}>{stat.icon}</div>
               </div>
-              <div className="mt-3 inline-block px-2.5 py-1 bg-success/20 rounded text-xs font-semibold text-success">
+              <div className={`mt-3 inline-block px-3 py-1 bg-${stat.color}/20 rounded-full text-xs font-semibold text-${stat.color}`}>
                 {stat.trend}
               </div>
             </div>
