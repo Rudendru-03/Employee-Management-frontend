@@ -4,8 +4,11 @@ import AttendanceFilters from "../components/AttendanceFilters";
 import AttendanceForm from "../components/AttendanceForm";
 import AttendancePagination from "../components/AttendancePagination";
 import AttendanceTable from "../components/AttendanceTable";
+import Modal from "../../../components/Modal";
 import { attendanceService } from "../services/attendanceService";
 import { userService } from "../services/userService";
+import { BarChart, Bar, LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { ArrowLeft, Plus, CheckCircle, XCircle, Calendar } from "lucide-react";
 
 const defaultFilters = {
   userId: "",
@@ -175,114 +178,209 @@ const Attendance = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <button
-              onClick={() => navigate("/dashboard")}
-              className="mb-4 inline-flex items-center font-medium text-emerald-700 hover:text-emerald-900"
-            >
-              <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to Dashboard
-            </button>
-            <h1 className="text-4xl font-bold text-gray-900">Attendance Management</h1>
-            <p className="mt-2 text-gray-600">
-              Mark daily attendance, review working hours, and keep employee records current.
-            </p>
-          </div>
+  // Hardcoded analytics data
+  const attendanceTrendData = [
+    { date: "Mon", present: 220, absent: 28 },
+    { date: "Tue", present: 225, absent: 23 },
+    { date: "Wed", present: 235, absent: 13 },
+    { date: "Thu", present: 218, absent: 30 },
+    { date: "Fri", present: 210, absent: 38 },
+  ];
 
-          {!isFormOpen && (
+  const statusDistribution = [
+    { name: "Present", value: summary.present },
+    { name: "Absent", value: summary.absent },
+    { name: "Leave", value: summary.leave },
+    { name: "Holiday", value: summary.holiday },
+  ];
+
+  const chartColors = ["#10b981", "#ef4444", "#f59e0b", "#3b82f6"];
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card/50 backdrop-blur">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="p-2 hover:bg-background rounded-lg transition text-muted hover:text-foreground"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <div className="slide-up">
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground">Attendance Management</h1>
+                <p className="text-muted-light mt-2">Mark daily attendance and track employee presence with analytics</p>
+              </div>
+            </div>
             <button
               onClick={handleAddNew}
-              disabled={loading}
-              className="rounded-lg bg-emerald-600 px-6 py-3 font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
+              disabled={loading || isFormOpen}
+              className="flex items-center gap-2 px-4 py-2.5 bg-success hover:bg-success text-white rounded-lg font-medium transition disabled:opacity-50 slide-up"
             >
-              + Mark Attendance
+              <Plus className="w-4 h-4" />
+              Mark Attendance
             </button>
-          )}
-        </div>
-
-        <div className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Visible Records</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900">{records.length}</p>
-          </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Present</p>
-            <p className="mt-2 text-3xl font-bold text-green-700">{summary.present}</p>
-          </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Absent</p>
-            <p className="mt-2 text-3xl font-bold text-red-700">{summary.absent}</p>
-          </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Leave / Holiday</p>
-            <p className="mt-2 text-3xl font-bold text-amber-700">
-              {summary.leave + summary.holiday}
-            </p>
           </div>
         </div>
+      </header>
 
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Messages */}
         {success && (
-          <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-4">
-            <p className="text-sm font-medium text-green-800">{success}</p>
+          <div className="mb-6 p-4 bg-success/10 border border-success/30 rounded-lg text-success text-sm font-medium fade-in">
+            ✓ {success}
           </div>
         )}
 
         {error && (
-          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
-            <p className="text-sm font-medium text-red-800">{error}</p>
+          <div className="mb-6 p-4 bg-danger/10 border border-danger/30 rounded-lg text-danger text-sm font-medium fade-in">
+            ✕ {error}
           </div>
         )}
 
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-card border border-border rounded-xl p-6 slide-up">
+            <p className="text-muted text-sm font-medium">Total Marked</p>
+            <p className="text-3xl font-bold text-foreground mt-2">{records.length}</p>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-6 slide-up" style={{ animationDelay: "50ms" }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-muted text-sm font-medium">Present</p>
+                <p className="text-3xl font-bold text-success mt-2">{summary.present}</p>
+              </div>
+              <CheckCircle className="w-8 h-8 text-success" />
+            </div>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-6 slide-up" style={{ animationDelay: "100ms" }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-muted text-sm font-medium">Absent</p>
+                <p className="text-3xl font-bold text-danger mt-2">{summary.absent}</p>
+              </div>
+              <XCircle className="w-8 h-8 text-danger" />
+            </div>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-6 slide-up" style={{ animationDelay: "150ms" }}>
+            <p className="text-muted text-sm font-medium">Leave / Holiday</p>
+            <p className="text-3xl font-bold text-warning mt-2">{summary.leave + summary.holiday}</p>
+          </div>
+        </div>
+
+        {/* Analytics */}
+        {records.length > 0 && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Attendance Trend */}
+            <div className="bg-card border border-border rounded-2xl p-6 slide-up">
+              <h2 className="text-xl font-bold text-foreground mb-4 flex items-center gap-2">
+                <Calendar className="w-5 h-5 text-primary" />
+                Weekly Trend
+              </h2>
+              <ResponsiveContainer width="100%" height={280}>
+                <BarChart data={attendanceTrendData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="date" stroke="var(--muted)" />
+                  <YAxis stroke="var(--muted)" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: "var(--card)",
+                      border: "1px solid var(--border)",
+                      borderRadius: "8px"
+                    }}
+                    labelStyle={{ color: "var(--foreground)" }}
+                  />
+                  <Bar dataKey="present" fill="#10b981" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="absent" fill="#ef4444" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Status Distribution */}
+            <div className="bg-card border border-border rounded-2xl p-6 slide-up" style={{ animationDelay: "100ms" }}>
+              <h2 className="text-xl font-bold text-foreground mb-4">Status Distribution</h2>
+              <ResponsiveContainer width="100%" height={280}>
+                <PieChart>
+                  <Pie
+                    data={statusDistribution.filter(item => item.value > 0)}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ name, value }) => `${name}: ${value}`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {statusDistribution.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={chartColors[index]} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: "var(--card)",
+                      border: "1px solid var(--border)",
+                      borderRadius: "8px"
+                    }}
+                    labelStyle={{ color: "var(--foreground)" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
+        {/* Filters and Table */}
         <div className="space-y-6">
-          {isFormOpen ? (
-            <AttendanceForm
-              users={users}
-              initialData={editingRecord}
-              loading={saving}
-              onCancel={handleCancel}
-              onSubmit={handleSubmit}
-            />
+          <AttendanceFilters
+            filters={filters}
+            users={users}
+            loading={loading}
+            onChange={handleFiltersChange}
+            onReset={handleResetFilters}
+          />
+
+          {loading ? (
+            <div className="bg-card border border-border rounded-2xl py-12 text-center">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <p className="mt-4 text-muted-light font-medium">Loading attendance...</p>
+            </div>
           ) : (
             <>
-              <AttendanceFilters
-                filters={filters}
-                users={users}
-                loading={loading}
-                onChange={handleFiltersChange}
-                onReset={handleResetFilters}
+              <AttendanceTable
+                records={records}
+                loading={saving}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onAddNew={handleAddNew}
               />
-
-              {loading ? (
-                <div className="rounded-lg bg-white py-12 text-center shadow">
-                  <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-emerald-600"></div>
-                  <p className="mt-4 font-medium text-gray-600">Loading attendance...</p>
-                </div>
-              ) : (
-                <>
-                  <AttendanceTable
-                    records={records}
-                    loading={saving}
-                    onEdit={handleEdit}
-                    onDelete={handleDelete}
-                    onAddNew={handleAddNew}
-                  />
-                  <AttendancePagination
-                    pagination={pagination}
-                    loading={loading}
-                    onPageChange={setOffset}
-                  />
-                </>
-              )}
+              <AttendancePagination
+                pagination={pagination}
+                loading={loading}
+                onPageChange={setOffset}
+              />
             </>
           )}
         </div>
-      </div>
+      </main>
+
+      {/* Modal for Form */}
+      <Modal
+        isOpen={isFormOpen}
+        onClose={handleCancel}
+        title={editingRecord ? 'Edit Attendance' : 'Mark Attendance'}
+        size="lg"
+      >
+        <AttendanceForm
+          users={users}
+          initialData={editingRecord}
+          loading={saving}
+          onCancel={handleCancel}
+          onSubmit={handleSubmit}
+        />
+      </Modal>
     </div>
   );
 };

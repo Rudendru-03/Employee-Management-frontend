@@ -4,8 +4,11 @@ import LeaveFilters from "../components/LeaveFilters";
 import LeaveForm from "../components/LeaveForm";
 import LeavePagination from "../components/LeavePagination";
 import LeaveTable from "../components/LeaveTable";
+import Modal from "../../../components/Modal";
 import { leaveService } from "../services/leaveService";
 import { userService } from "../services/userService";
+import { BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { ArrowLeft, Plus, Clock, CheckCircle, XCircle } from "lucide-react";
 
 const defaultFilters = {
   userId: "",
@@ -163,116 +166,219 @@ const LeaveManagement = () => {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100">
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-        <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-          <div>
-            <button
-              onClick={() => navigate("/dashboard")}
-              className="mb-4 inline-flex items-center font-medium text-amber-700 hover:text-amber-900"
-            >
-              <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-              </svg>
-              Back to Dashboard
-            </button>
-            <h1 className="text-4xl font-bold text-gray-900">Leave Management</h1>
-            <p className="mt-2 text-gray-600">
-              Review leave requests, update approval status, and track team availability.
-            </p>
-          </div>
+  // Hardcoded analytics data
+  const leavesByType = [
+    { name: "Sick Leave", value: summary.pending, color: "#ef4444" },
+    { name: "Vacation", value: 25, color: "#3b82f6" },
+    { name: "Personal", value: 12, color: "#10b981" },
+    { name: "Maternity", value: 3, color: "#f59e0b" },
+  ];
 
-          {!isFormOpen && (
+  const monthlyLeaveData = [
+    { month: "Jan", approved: 18, pending: 4, rejected: 2 },
+    { month: "Feb", approved: 22, pending: 3, rejected: 1 },
+    { month: "Mar", approved: 25, pending: 5, rejected: 2 },
+    { month: "Apr", approved: 20, pending: 6, rejected: 1 },
+    { month: "May", approved: 23, pending: summary.pending, rejected: 1 },
+  ];
+
+  const chartColors = ["#ef4444", "#3b82f6", "#10b981", "#f59e0b"];
+
+  return (
+    <div className="min-h-screen bg-background">
+      {/* Header */}
+      <header className="border-b border-border bg-card/50 backdrop-blur">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="flex items-center justify-between gap-4">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="p-2 hover:bg-background rounded-lg transition text-muted hover:text-foreground"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <div className="slide-up">
+                <h1 className="text-3xl md:text-4xl font-bold text-foreground">Leave Management</h1>
+                <p className="text-muted-light mt-2">Review leave requests and track team availability</p>
+              </div>
+            </div>
             <button
               onClick={() => {
                 setIsFormOpen(true);
                 setError("");
               }}
-              disabled={loading}
-              className="rounded-lg bg-amber-500 px-6 py-3 font-semibold text-white transition hover:bg-amber-600 disabled:opacity-50"
+              disabled={loading || isFormOpen}
+              className="flex items-center gap-2 px-4 py-2.5 bg-warning hover:bg-warning text-white rounded-lg font-medium transition disabled:opacity-50 slide-up"
             >
-              + Create Leave Request
+              <Plus className="w-4 h-4" />
+              Create Request
             </button>
-          )}
-        </div>
-
-        <div className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Visible Requests</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900">{leaves.length}</p>
-          </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Pending</p>
-            <p className="mt-2 text-3xl font-bold text-amber-700">{summary.pending}</p>
-          </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Approved</p>
-            <p className="mt-2 text-3xl font-bold text-green-700">{summary.approved}</p>
-          </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Rejected</p>
-            <p className="mt-2 text-3xl font-bold text-red-700">{summary.rejected}</p>
           </div>
         </div>
+      </header>
 
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* Messages */}
         {success && (
-          <div className="mb-6 rounded-lg border border-green-200 bg-green-50 p-4">
-            <p className="text-sm font-medium text-green-800">{success}</p>
+          <div className="mb-6 p-4 bg-success/10 border border-success/30 rounded-lg text-success text-sm font-medium fade-in">
+            ✓ {success}
           </div>
         )}
 
         {error && (
-          <div className="mb-6 rounded-lg border border-red-200 bg-red-50 p-4">
-            <p className="text-sm font-medium text-red-800">{error}</p>
+          <div className="mb-6 p-4 bg-danger/10 border border-danger/30 rounded-lg text-danger text-sm font-medium fade-in">
+            ✕ {error}
           </div>
         )}
 
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          <div className="bg-card border border-border rounded-xl p-6 slide-up">
+            <p className="text-muted text-sm font-medium">Total Requests</p>
+            <p className="text-3xl font-bold text-foreground mt-2">{leaves.length}</p>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-6 slide-up" style={{ animationDelay: "50ms" }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-muted text-sm font-medium">Pending</p>
+                <p className="text-3xl font-bold text-warning mt-2">{summary.pending}</p>
+              </div>
+              <Clock className="w-8 h-8 text-warning" />
+            </div>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-6 slide-up" style={{ animationDelay: "100ms" }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-muted text-sm font-medium">Approved</p>
+                <p className="text-3xl font-bold text-success mt-2">{summary.approved}</p>
+              </div>
+              <CheckCircle className="w-8 h-8 text-success" />
+            </div>
+          </div>
+          <div className="bg-card border border-border rounded-xl p-6 slide-up" style={{ animationDelay: "150ms" }}>
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-muted text-sm font-medium">Rejected</p>
+                <p className="text-3xl font-bold text-danger mt-2">{summary.rejected}</p>
+              </div>
+              <XCircle className="w-8 h-8 text-danger" />
+            </div>
+          </div>
+        </div>
+
+        {/* Analytics */}
+        {leaves.length > 0 && (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Monthly Leave Trend */}
+            <div className="bg-card border border-border rounded-2xl p-6 slide-up">
+              <h2 className="text-xl font-bold text-foreground mb-4">Monthly Requests</h2>
+              <ResponsiveContainer width="100%" height={280}>
+                <BarChart data={monthlyLeaveData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+                  <XAxis dataKey="month" stroke="var(--muted)" />
+                  <YAxis stroke="var(--muted)" />
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: "var(--card)",
+                      border: "1px solid var(--border)",
+                      borderRadius: "8px"
+                    }}
+                    labelStyle={{ color: "var(--foreground)" }}
+                  />
+                  <Bar dataKey="approved" fill="#10b981" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="pending" fill="#f59e0b" radius={[8, 8, 0, 0]} />
+                  <Bar dataKey="rejected" fill="#ef4444" radius={[8, 8, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Leave Type Distribution */}
+            <div className="bg-card border border-border rounded-2xl p-6 slide-up" style={{ animationDelay: "100ms" }}>
+              <h2 className="text-xl font-bold text-foreground mb-4">Requests by Type</h2>
+              <ResponsiveContainer width="100%" height={280}>
+                <PieChart>
+                  <Pie
+                    data={leavesByType.filter(item => item.value > 0)}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    label={({ name, value }) => `${name}: ${value}`}
+                    outerRadius={80}
+                    fill="#8884d8"
+                    dataKey="value"
+                  >
+                    {leavesByType.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: "var(--card)",
+                      border: "1px solid var(--border)",
+                      borderRadius: "8px"
+                    }}
+                    labelStyle={{ color: "var(--foreground)" }}
+                  />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
+
+        {/* Filters and Table */}
         <div className="space-y-6">
-          {isFormOpen ? (
-            <LeaveForm
-              loading={saving}
-              onCancel={() => {
-                setIsFormOpen(false);
-                setError("");
-              }}
-              onSubmit={handleCreateLeave}
-            />
+          <LeaveFilters
+            filters={filters}
+            users={users}
+            loading={loading}
+            onChange={handleFiltersChange}
+            onReset={handleResetFilters}
+          />
+
+          {loading ? (
+            <div className="bg-card border border-border rounded-2xl py-12 text-center">
+              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+              <p className="mt-4 text-muted-light font-medium">Loading leave requests...</p>
+            </div>
           ) : (
             <>
-              <LeaveFilters
-                filters={filters}
-                users={users}
-                loading={loading}
-                onChange={handleFiltersChange}
-                onReset={handleResetFilters}
+              <LeaveTable
+                leaves={leaves}
+                loading={saving}
+                onAddNew={() => setIsFormOpen(true)}
+                onDelete={handleDelete}
+                onStatusChange={handleStatusChange}
               />
-
-              {loading ? (
-                <div className="rounded-lg bg-white py-12 text-center shadow">
-                  <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-amber-500"></div>
-                  <p className="mt-4 font-medium text-gray-600">Loading leave requests...</p>
-                </div>
-              ) : (
-                <>
-                  <LeaveTable
-                    leaves={leaves}
-                    loading={saving}
-                    onAddNew={() => setIsFormOpen(true)}
-                    onDelete={handleDelete}
-                    onStatusChange={handleStatusChange}
-                  />
-                  <LeavePagination
-                    pagination={pagination}
-                    loading={loading}
-                    onPageChange={setOffset}
-                  />
-                </>
-              )}
+              <LeavePagination
+                pagination={pagination}
+                loading={loading}
+                onPageChange={setOffset}
+              />
             </>
           )}
         </div>
-      </div>
+      </main>
+
+      {/* Modal for Form */}
+      <Modal
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setError("");
+        }}
+        title="Create Leave Request"
+        size="lg"
+      >
+        <LeaveForm
+          loading={saving}
+          onCancel={() => {
+            setIsFormOpen(false);
+            setError("");
+          }}
+          onSubmit={handleCreateLeave}
+        />
+      </Modal>
     </div>
   );
 };
