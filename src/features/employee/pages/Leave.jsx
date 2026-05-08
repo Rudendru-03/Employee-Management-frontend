@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import EmployeePagination from "../components/EmployeePagination";
+import AdminModal from '../../admin/components/AdminModal';
 import { employeeService } from "../services/employeeService";
 
 const defaultFilters = {
@@ -174,21 +175,21 @@ const EmployeeLeave = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <button
               onClick={() => navigate("/dashboard")}
-              className="mb-4 inline-flex items-center font-medium text-yellow-700 hover:text-yellow-900"
+              className="mb-4 inline-flex items-center font-medium text-amber-300 hover:text-amber-200"
             >
               <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
               Back to Dashboard
             </button>
-            <h1 className="text-4xl font-bold text-gray-900">My Leave</h1>
-            <p className="mt-2 text-gray-600">Apply for leave and track approval status after review.</p>
+            <h1 className="text-4xl font-bold text-white">My Leave</h1>
+            <p className="mt-2 text-slate-300">Apply for leave and track approval status after review.</p>
           </div>
 
           {!showForm && (
@@ -198,7 +199,7 @@ const EmployeeLeave = () => {
                 setError("");
               }}
               disabled={loading}
-              className="rounded-lg bg-yellow-500 px-6 py-3 font-semibold text-white transition hover:bg-yellow-600 disabled:opacity-50"
+              className="rounded-3xl bg-amber-400 px-6 py-3 font-semibold text-slate-900 transition hover:bg-amber-300 disabled:opacity-50"
             >
               + Apply Leave
             </button>
@@ -207,21 +208,21 @@ const EmployeeLeave = () => {
 
         {!showForm && (
           <div className="mb-6 grid gap-4 md:grid-cols-4">
-            <div className="rounded-lg bg-white p-5 shadow">
-              <p className="text-sm font-medium text-gray-500">Visible Requests</p>
-              <p className="mt-2 text-3xl font-bold text-gray-900">{leaves.length}</p>
+            <div className="rounded-3xl bg-slate-900/60 p-5 shadow">
+              <p className="text-sm font-medium text-slate-400">Visible Requests</p>
+              <p className="mt-2 text-3xl font-bold text-white">{leaves.length}</p>
             </div>
-            <div className="rounded-lg bg-white p-5 shadow">
-              <p className="text-sm font-medium text-gray-500">Pending</p>
-              <p className="mt-2 text-3xl font-bold text-amber-700">{summary.pending}</p>
+            <div className="rounded-3xl bg-slate-900/60 p-5 shadow">
+              <p className="text-sm font-medium text-slate-400">Pending</p>
+              <p className="mt-2 text-3xl font-bold text-amber-400">{summary.pending}</p>
             </div>
-            <div className="rounded-lg bg-white p-5 shadow">
-              <p className="text-sm font-medium text-gray-500">Approved</p>
-              <p className="mt-2 text-3xl font-bold text-green-700">{summary.approved}</p>
+            <div className="rounded-3xl bg-slate-900/60 p-5 shadow">
+              <p className="text-sm font-medium text-slate-400">Approved</p>
+              <p className="mt-2 text-3xl font-bold text-emerald-400">{summary.approved}</p>
             </div>
-            <div className="rounded-lg bg-white p-5 shadow">
-              <p className="text-sm font-medium text-gray-500">Rejected</p>
-              <p className="mt-2 text-3xl font-bold text-red-700">{summary.rejected}</p>
+            <div className="rounded-3xl bg-slate-900/60 p-5 shadow">
+              <p className="text-sm font-medium text-slate-400">Rejected</p>
+              <p className="mt-2 text-3xl font-bold text-rose-400">{summary.rejected}</p>
             </div>
           </div>
         )}
@@ -240,96 +241,98 @@ const EmployeeLeave = () => {
 
         <div className="space-y-6">
           {showForm ? (
-            <form onSubmit={handleApplyLeave} className="rounded-lg bg-white p-6 shadow">
-              <div className="mb-6">
-                <h2 className="text-2xl font-bold text-gray-900">Apply for Leave</h2>
-                <p className="mt-1 text-sm text-gray-500">
-                  Submit leave type, dates, and reason. Approval status is handled by admin or manager.
-                </p>
-              </div>
-              <div className="grid gap-5 md:grid-cols-3">
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">Leave Type</label>
-                  <select
-                    name="leaveType"
-                    value={formData.leaveType}
-                    onChange={handleFormChange}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 capitalize focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  >
-                    <option value="casual">Casual</option>
-                    <option value="sick">Sick</option>
-                    <option value="paid">Paid</option>
-                  </select>
+            <AdminModal isOpen={showForm} onClose={() => { setShowForm(false); setError(''); }} title="Apply for Leave">
+              <form onSubmit={handleApplyLeave} className="rounded-2xl bg-slate-900/80 p-6 shadow">
+                <div className="mb-6">
+                  <h2 className="text-2xl font-bold text-white">Apply for Leave</h2>
+                  <p className="mt-1 text-sm text-slate-300">
+                    Submit leave type, dates, and reason. Approval status is handled by admin or manager.
+                  </p>
                 </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">From Date *</label>
-                  <input
-                    type="date"
-                    name="fromDate"
-                    value={formData.fromDate}
-                    onChange={handleFormChange}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  />
-                  {formErrors.fromDate && <p className="mt-1 text-sm text-red-600">{formErrors.fromDate}</p>}
-                </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-gray-700">To Date *</label>
-                  <input
-                    type="date"
-                    name="toDate"
-                    value={formData.toDate}
-                    onChange={handleFormChange}
-                    className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                  />
-                  {formErrors.toDate && <p className="mt-1 text-sm text-red-600">{formErrors.toDate}</p>}
-                </div>
-              </div>
-              <div className="mt-5">
-                <label className="mb-2 block text-sm font-medium text-gray-700">Reason *</label>
-                <textarea
-                  name="reason"
-                  value={formData.reason}
-                  onChange={handleFormChange}
-                  rows="4"
-                  placeholder="Add a clear reason for your leave request"
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-yellow-500"
-                />
-                {formErrors.reason && <p className="mt-1 text-sm text-red-600">{formErrors.reason}</p>}
-              </div>
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="rounded-lg bg-yellow-500 px-6 py-3 text-sm font-semibold text-white transition hover:bg-yellow-600 disabled:opacity-50"
-                >
-                  {saving ? "Submitting..." : "Submit Leave Request"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowForm(false);
-                    setError("");
-                  }}
-                  disabled={saving}
-                  className="rounded-lg bg-gray-200 px-6 py-3 text-sm font-semibold text-gray-900 transition hover:bg-gray-300 disabled:opacity-50"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          ) : (
-            <>
-              <div className="rounded-lg bg-white p-5 shadow">
-                <div className="grid gap-4 md:grid-cols-3">
+                <div className="grid gap-5 md:grid-cols-3">
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">Leave Type</label>
+                    <label className="mb-2 block text-sm font-medium text-slate-300">Leave Type</label>
                     <select
                       name="leaveType"
-                      value={filters.leaveType}
-                      onChange={handleFilterChange}
-                      disabled={loading}
-                      className="w-full rounded-lg border border-gray-300 px-4 py-2 capitalize focus:outline-none focus:ring-2 focus:ring-yellow-500 disabled:bg-gray-100"
+                      value={formData.leaveType}
+                      onChange={handleFormChange}
+                      className="w-full rounded-lg border border-slate-700 px-4 py-2 capitalize bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400"
                     >
+                      <option value="casual">Casual</option>
+                      <option value="sick">Sick</option>
+                      <option value="paid">Paid</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-300">From Date *</label>
+                    <input
+                      type="date"
+                      name="fromDate"
+                      value={formData.fromDate}
+                      onChange={handleFormChange}
+                      className="w-full rounded-lg border border-slate-700 px-4 py-2 bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    />
+                    {formErrors.fromDate && <p className="mt-1 text-sm text-rose-400">{formErrors.fromDate}</p>}
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-slate-300">To Date *</label>
+                    <input
+                      type="date"
+                      name="toDate"
+                      value={formData.toDate}
+                      onChange={handleFormChange}
+                      className="w-full rounded-lg border border-slate-700 px-4 py-2 bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                    />
+                    {formErrors.toDate && <p className="mt-1 text-sm text-rose-400">{formErrors.toDate}</p>}
+                  </div>
+                </div>
+                <div className="mt-5">
+                  <label className="mb-2 block text-sm font-medium text-slate-300">Reason *</label>
+                  <textarea
+                    name="reason"
+                    value={formData.reason}
+                    onChange={handleFormChange}
+                    rows="4"
+                    placeholder="Add a clear reason for your leave request"
+                    className="w-full rounded-lg border border-slate-700 px-4 py-2 bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400"
+                  />
+                  {formErrors.reason && <p className="mt-1 text-sm text-rose-400">{formErrors.reason}</p>}
+                </div>
+                <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    className="rounded-3xl bg-amber-400 px-6 py-3 text-sm font-semibold text-slate-900 transition hover:bg-amber-300 disabled:opacity-50"
+                  >
+                    {saving ? "Submitting..." : "Submit Leave Request"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowForm(false);
+                      setError("");
+                    }}
+                    disabled={saving}
+                    className="rounded-3xl bg-slate-800 px-6 py-3 text-sm font-semibold text-slate-300 transition hover:bg-slate-700 disabled:opacity-50"
+                  >
+                    Cancel
+                  </button>
+              </div>
+              </form>
+              </AdminModal>
+            ) : (
+            <>
+                <div className="rounded-3xl bg-slate-900/60 p-5 shadow">
+                <div className="grid gap-4 md:grid-cols-3">
+                  <div>
+                      <label className="mb-2 block text-sm font-medium text-slate-300">Leave Type</label>
+                      <select
+                        name="leaveType"
+                        value={filters.leaveType}
+                        onChange={handleFilterChange}
+                        disabled={loading}
+                        className="w-full rounded-lg border border-slate-700 px-4 py-2 capitalize bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50"
+                      >
                       <option value="">All types</option>
                       <option value="sick">Sick</option>
                       <option value="casual">Casual</option>
@@ -337,14 +340,14 @@ const EmployeeLeave = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="mb-2 block text-sm font-medium text-gray-700">Status</label>
-                    <select
-                      name="status"
-                      value={filters.status}
-                      onChange={handleFilterChange}
-                      disabled={loading}
-                      className="w-full rounded-lg border border-gray-300 px-4 py-2 capitalize focus:outline-none focus:ring-2 focus:ring-yellow-500 disabled:bg-gray-100"
-                    >
+                      <label className="mb-2 block text-sm font-medium text-slate-300">Status</label>
+                      <select
+                        name="status"
+                        value={filters.status}
+                        onChange={handleFilterChange}
+                        disabled={loading}
+                        className="w-full rounded-lg border border-slate-700 px-4 py-2 capitalize bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-amber-400 disabled:opacity-50"
+                      >
                       <option value="">All statuses</option>
                       <option value="pending">Pending</option>
                       <option value="approved">Approved</option>
@@ -356,7 +359,7 @@ const EmployeeLeave = () => {
                       type="button"
                       onClick={resetFilters}
                       disabled={loading}
-                      className="w-full rounded-lg bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-300 disabled:opacity-50"
+                        className="w-full rounded-3xl bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
                     >
                       Reset Filters
                     </button>
@@ -365,50 +368,50 @@ const EmployeeLeave = () => {
               </div>
 
               {loading ? (
-                <div className="rounded-lg bg-white py-12 text-center shadow">
-                  <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-yellow-500"></div>
-                  <p className="mt-4 font-medium text-gray-600">Loading leave requests...</p>
+                <div className="rounded-3xl bg-slate-900/60 py-12 text-center shadow">
+                  <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-amber-400"></div>
+                  <p className="mt-4 font-medium text-slate-300">Loading leave requests...</p>
                 </div>
               ) : leaves.length === 0 ? (
-                <div className="rounded-lg bg-white p-12 text-center shadow">
-                  <h3 className="text-lg font-medium text-gray-900">No leave requests</h3>
-                  <p className="mt-1 text-sm text-gray-500">Apply for leave to start tracking your requests.</p>
+                <div className="rounded-3xl bg-slate-900/60 p-12 text-center shadow">
+                  <h3 className="text-lg font-medium text-white">No leave requests</h3>
+                  <p className="mt-1 text-sm text-slate-400">Apply for leave to start tracking your requests.</p>
                 </div>
               ) : (
                 <>
-                  <div className="overflow-hidden rounded-lg bg-white shadow">
+                  <div className="overflow-hidden rounded-2xl bg-slate-900/50 shadow">
                     <div className="overflow-x-auto">
-                      <table className="min-w-full divide-y divide-gray-200">
-                        <thead className="bg-gray-50">
+                      <table className="min-w-full divide-y divide-slate-800">
+                        <thead className="bg-slate-800/50">
                           <tr>
-                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Type</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Dates</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Reason</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
-                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Approved By</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Type</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Dates</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Reason</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Status</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Approved By</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-gray-200 bg-white">
+                        <tbody className="divide-y divide-slate-800 bg-slate-900/40">
                           {leaves.map((leave) => (
-                            <tr key={leave._id} className="hover:bg-gray-50">
+                            <tr key={leave._id} className="hover:bg-slate-800/40">
                               <td className="whitespace-nowrap px-6 py-4">
-                                <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold capitalize ${typeClasses[leave.leaveType] || "bg-gray-100 text-gray-800"}`}>
+                                <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold capitalize ${typeClasses[leave.leaveType] || "bg-slate-700 text-slate-200"}`}>
                                   {leave.leaveType}
                                 </span>
                               </td>
-                              <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">
+                              <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-300">
                                 <div>{formatDate(leave.fromDate)} - {formatDate(leave.toDate)}</div>
-                                <div className="mt-1 text-xs font-medium text-gray-500">{getDays(leave.fromDate, leave.toDate)}</div>
+                                <div className="mt-1 text-xs font-medium text-slate-400">{getDays(leave.fromDate, leave.toDate)}</div>
                               </td>
-                              <td className="px-6 py-4 text-sm text-gray-600">
+                              <td className="px-6 py-4 text-sm text-slate-300">
                                 <div className="max-w-xs truncate" title={leave.reason}>{leave.reason}</div>
                               </td>
                               <td className="whitespace-nowrap px-6 py-4">
-                                <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold capitalize ${statusClasses[leave.status] || "bg-gray-100 text-gray-800"}`}>
+                                <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold capitalize ${statusClasses[leave.status] || "bg-slate-700 text-slate-200"}`}>
                                   {leave.status}
                                 </span>
                               </td>
-                              <td className="px-6 py-4 text-sm text-gray-600">{leave.approvedBy?.email || "N/A"}</td>
+                              <td className="px-6 py-4 text-sm text-slate-300">{leave.approvedBy?.email || "N/A"}</td>
                             </tr>
                           ))}
                         </tbody>

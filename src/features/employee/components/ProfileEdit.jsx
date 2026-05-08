@@ -69,35 +69,35 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Photo Section */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Profile Photo</h2>
+      <div className="bg-slate-900/80 rounded-2xl shadow p-6">
+        <h2 className="text-2xl font-bold text-white mb-6">Profile Photo</h2>
         <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
           <img
-            className="h-32 w-32 rounded-full border-4 border-indigo-200 object-cover"
+            className="h-32 w-32 rounded-full border-4 border-slate-800 object-cover"
             src={photoPreview || 'https://via.placeholder.com/128?text=No+Photo'}
             alt="Profile"
           />
           <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-300 mb-2">
               Upload Photo
             </label>
             <input
               type="file"
               accept="image/*"
               onChange={handlePhotoChange}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-600 hover:file:bg-indigo-100"
+              className="block w-full text-sm text-slate-300 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700"
             />
-            <p className="text-xs text-gray-500 mt-2">PNG, JPG up to 10MB</p>
+            <p className="text-xs text-slate-400 mt-2">PNG, JPG up to 10MB</p>
           </div>
         </div>
       </div>
 
       {/* Personal Information */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Personal Information</h2>
+      <div className="bg-slate-900/80 rounded-2xl shadow p-6">
+        <h2 className="text-2xl font-bold text-white mb-6">Personal Information</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-300 mb-2">
               Date of Birth
             </label>
             <input
@@ -105,18 +105,18 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
               name="dateOfBirth"
               value={formData.dateOfBirth}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-300 mb-2">
               Gender
             </label>
             <select
               name="gender"
               value={formData.gender}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
             >
               <option value="">Select Gender</option>
               <option value="male">Male</option>
@@ -125,7 +125,7 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
             </select>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-300 mb-2">
               Phone Number
             </label>
             <input
@@ -134,19 +134,19 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
               value={formData.phoneNumber}
               onChange={handleChange}
               placeholder="+1 (555) 000-0000"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
             />
-            {errors.phoneNumber && <p className="text-red-600 text-sm mt-1">{errors.phoneNumber}</p>}
+            {errors.phoneNumber && <p className="text-rose-400 text-sm mt-1">{errors.phoneNumber}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-300 mb-2">
               Work Location
             </label>
             <select
               name="workLocation"
               value={formData.workLocation}
               onChange={handleChange}
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
             >
               <option value="">Select Work Location</option>
               <option value="office">Office</option>
@@ -157,10 +157,10 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
       </div>
 
       {/* Emergency Contact */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Emergency Contact</h2>
+      <div className="bg-slate-900/80 rounded-2xl shadow p-6">
+        <h2 className="text-2xl font-bold text-white mb-6">Emergency Contact</h2>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-300 mb-2">
             Contact Information
           </label>
           <textarea
@@ -169,17 +169,17 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
             onChange={handleChange}
             placeholder="Enter emergency contact name and phone number"
             rows="3"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
           />
         </div>
       </div>
 
       {/* Bank Details */}
-      <div className="bg-white rounded-lg shadow p-6">
-        <h2 className="text-2xl font-bold text-gray-900 mb-6">Bank Details</h2>
+      <div className="bg-slate-900/80 rounded-2xl shadow p-6">
+        <h2 className="text-2xl font-bold text-white mb-6">Bank Details</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-300 mb-2">
               Bank Name
             </label>
             <input
@@ -188,11 +188,11 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
               value={formData.bankName}
               onChange={handleChange}
               placeholder="e.g., Chase Bank"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-300 mb-2">
               Account Number
             </label>
             <input
@@ -201,12 +201,12 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
               value={formData.bankAccountNumber}
               onChange={handleChange}
               placeholder="Account number"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
             />
-            {errors.bankAccountNumber && <p className="text-red-600 text-sm mt-1">{errors.bankAccountNumber}</p>}
+            {errors.bankAccountNumber && <p className="text-rose-400 text-sm mt-1">{errors.bankAccountNumber}</p>}
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-300 mb-2">
               Account Holder Name
             </label>
             <input
@@ -215,11 +215,11 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
               value={formData.bankAccountHolderName}
               onChange={handleChange}
               placeholder="Full name"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label className="block text-sm font-medium text-slate-300 mb-2">
               Address
             </label>
             <input
@@ -228,7 +228,7 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
               value={formData.bankAccountHolderAddress}
               onChange={handleChange}
               placeholder="Full address"
-              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
             />
           </div>
         </div>
@@ -239,7 +239,7 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
         <button
           type="submit"
           disabled={loading}
-          className="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium disabled:opacity-50"
+          className="flex-1 px-6 py-3 bg-sky-400 text-slate-900 rounded-3xl hover:bg-sky-300 transition font-medium disabled:opacity-50"
         >
           {loading ? 'Saving...' : 'Save Changes'}
         </button>
@@ -247,7 +247,7 @@ const ProfileEdit = ({ employee, onSave, onCancel, loading }) => {
           type="button"
           onClick={onCancel}
           disabled={loading}
-          className="flex-1 px-6 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition font-medium disabled:opacity-50"
+          className="flex-1 px-6 py-3 bg-slate-800 text-slate-300 rounded-3xl hover:bg-slate-700 transition font-medium disabled:opacity-50"
         >
           Cancel
         </button>

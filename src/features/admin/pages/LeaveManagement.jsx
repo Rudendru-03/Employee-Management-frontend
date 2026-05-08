@@ -4,6 +4,7 @@ import LeaveFilters from "../components/LeaveFilters";
 import LeaveForm from "../components/LeaveForm";
 import LeavePagination from "../components/LeavePagination";
 import LeaveTable from "../components/LeaveTable";
+import AdminModal from '../components/AdminModal';
 import { leaveService } from "../services/leaveService";
 import { userService } from "../services/userService";
 
@@ -164,7 +165,7 @@ const LeaveManagement = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -190,7 +191,7 @@ const LeaveManagement = () => {
                 setError("");
               }}
               disabled={loading}
-              className="rounded-lg bg-amber-500 px-6 py-3 font-semibold text-white transition hover:bg-amber-600 disabled:opacity-50"
+              className="rounded-3xl bg-sky-400 px-6 py-3 font-semibold text-slate-900 transition hover:bg-sky-300 disabled:opacity-50"
             >
               + Create Leave Request
             </button>
@@ -198,21 +199,21 @@ const LeaveManagement = () => {
         </div>
 
         <div className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Visible Requests</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900">{leaves.length}</p>
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Visible Requests</p>
+            <p className="mt-2 text-3xl font-bold text-white">{leaves.length}</p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Pending</p>
-            <p className="mt-2 text-3xl font-bold text-amber-700">{summary.pending}</p>
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Pending</p>
+            <p className="mt-2 text-3xl font-bold text-amber-400">{summary.pending}</p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Approved</p>
-            <p className="mt-2 text-3xl font-bold text-green-700">{summary.approved}</p>
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Approved</p>
+            <p className="mt-2 text-3xl font-bold text-emerald-400">{summary.approved}</p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Rejected</p>
-            <p className="mt-2 text-3xl font-bold text-red-700">{summary.rejected}</p>
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Rejected</p>
+            <p className="mt-2 text-3xl font-bold text-rose-400">{summary.rejected}</p>
           </div>
         </div>
 
@@ -230,14 +231,16 @@ const LeaveManagement = () => {
 
         <div className="space-y-6">
           {isFormOpen ? (
-            <LeaveForm
-              loading={saving}
-              onCancel={() => {
-                setIsFormOpen(false);
-                setError("");
-              }}
-              onSubmit={handleCreateLeave}
-            />
+            <AdminModal isOpen={isFormOpen} onClose={() => { setIsFormOpen(false); setError(''); }} title="Create Leave Request">
+              <LeaveForm
+                loading={saving}
+                onCancel={() => {
+                  setIsFormOpen(false);
+                  setError("");
+                }}
+                onSubmit={handleCreateLeave}
+              />
+            </AdminModal>
           ) : (
             <>
               <LeaveFilters

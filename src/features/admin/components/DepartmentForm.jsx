@@ -46,14 +46,14 @@ const DepartmentForm = ({ onSubmit, onCancel, loading, initialData = null, manag
   };
 
   return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6">
+    <div className="bg-slate-900/80 rounded-2xl shadow p-6">
+      <h2 className="text-2xl font-bold text-white mb-6">
         {initialData ? 'Edit Department' : 'Create New Department'}
       </h2>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-300 mb-2">
             Department Name *
           </label>
           <input
@@ -62,13 +62,13 @@ const DepartmentForm = ({ onSubmit, onCancel, loading, initialData = null, manag
             value={formData.name}
             onChange={handleChange}
             placeholder="e.g., Engineering, HR, Sales"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
           />
-          {errors.name && <p className="text-red-600 text-sm mt-1">{errors.name}</p>}
+          {errors.name && <p className="text-rose-400 text-sm mt-1">{errors.name}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-300 mb-2">
             Description *
           </label>
           <textarea
@@ -77,20 +77,20 @@ const DepartmentForm = ({ onSubmit, onCancel, loading, initialData = null, manag
             onChange={handleChange}
             placeholder="Brief description of the department"
             rows="4"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
           />
-          {errors.description && <p className="text-red-600 text-sm mt-1">{errors.description}</p>}
+          {errors.description && <p className="text-rose-400 text-sm mt-1">{errors.description}</p>}
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
+          <label className="block text-sm font-medium text-slate-300 mb-2">
             Department Manager *
           </label>
           <select
             name="manager"
             value={formData.manager}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full px-4 py-2 border border-slate-700 rounded-lg bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400"
           >
             <option value="">Select a manager</option>
             {managers.map(manager => (
@@ -99,14 +99,14 @@ const DepartmentForm = ({ onSubmit, onCancel, loading, initialData = null, manag
               </option>
             ))}
           </select>
-          {errors.manager && <p className="text-red-600 text-sm mt-1">{errors.manager}</p>}
+          {errors.manager && <p className="text-rose-400 text-sm mt-1">{errors.manager}</p>}
         </div>
 
         <div className="flex gap-4 pt-6">
           <button
             type="submit"
             disabled={loading}
-            className="flex-1 px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium disabled:opacity-50"
+            className="flex-1 px-6 py-3 bg-sky-400 text-slate-900 rounded-3xl hover:bg-sky-300 transition font-medium disabled:opacity-50"
           >
             {loading ? 'Saving...' : (initialData ? 'Update Department' : 'Create Department')}
           </button>
@@ -114,7 +114,7 @@ const DepartmentForm = ({ onSubmit, onCancel, loading, initialData = null, manag
             type="button"
             onClick={onCancel}
             disabled={loading}
-            className="flex-1 px-6 py-3 bg-gray-200 text-gray-900 rounded-lg hover:bg-gray-300 transition font-medium disabled:opacity-50"
+            className="flex-1 px-6 py-3 bg-slate-800 text-slate-300 rounded-3xl hover:bg-slate-700 transition font-medium disabled:opacity-50"
           >
             Cancel
           </button>

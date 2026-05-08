@@ -4,6 +4,7 @@ import PayrollFilters from "../components/PayrollFilters";
 import PayrollForm from "../components/PayrollForm";
 import PayrollPagination from "../components/PayrollPagination";
 import PayrollTable from "../components/PayrollTable";
+import AdminModal from '../components/AdminModal';
 import { payrollService } from "../services/payrollService";
 import { userService } from "../services/userService";
 
@@ -183,7 +184,7 @@ const Payroll = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -206,7 +207,7 @@ const Payroll = () => {
             <button
               onClick={handleAddNew}
               disabled={loading}
-              className="rounded-lg bg-rose-600 px-6 py-3 font-semibold text-white transition hover:bg-rose-700 disabled:opacity-50"
+              className="rounded-3xl bg-sky-400 px-6 py-3 font-semibold text-slate-900 transition hover:bg-sky-300 disabled:opacity-50"
             >
               + Create Payroll
             </button>
@@ -214,25 +215,25 @@ const Payroll = () => {
         </div>
 
         <div className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Visible Records</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900">{payrolls.length}</p>
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Visible Records</p>
+            <p className="mt-2 text-3xl font-bold text-white">{payrolls.length}</p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Gross Salary</p>
-            <p className="mt-2 text-2xl font-bold text-gray-900">
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Gross Salary</p>
+            <p className="mt-2 text-2xl font-bold text-white">
               {money(summary.basicSalary + summary.bonus)}
             </p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Deductions</p>
-            <p className="mt-2 text-2xl font-bold text-red-700">
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Deductions</p>
+            <p className="mt-2 text-2xl font-bold text-rose-400">
               {money(summary.deductions)}
             </p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Net Payout</p>
-            <p className="mt-2 text-2xl font-bold text-green-700">
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Net Payout</p>
+            <p className="mt-2 text-2xl font-bold text-emerald-400">
               {money(summary.netSalary)}
             </p>
           </div>
@@ -252,13 +253,15 @@ const Payroll = () => {
 
         <div className="space-y-6">
           {isFormOpen ? (
-            <PayrollForm
-              users={users}
-              initialData={editingPayroll}
-              loading={saving}
-              onCancel={handleCancel}
-              onSubmit={handleSubmit}
-            />
+            <AdminModal isOpen={isFormOpen} onClose={handleCancel} title={editingPayroll ? 'Edit Payroll' : 'Create Payroll'}>
+              <PayrollForm
+                users={users}
+                initialData={editingPayroll}
+                loading={saving}
+                onCancel={handleCancel}
+                onSubmit={handleSubmit}
+              />
+            </AdminModal>
           ) : (
             <>
               <PayrollFilters

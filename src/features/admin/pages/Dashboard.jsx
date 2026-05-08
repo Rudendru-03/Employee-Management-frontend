@@ -15,7 +15,7 @@ const AdminDashboard = () => {
         className="pointer-events-none absolute inset-0"
         style={{
           backgroundImage:
-            'radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 22%), radial-gradient(circle at 80% 20%, rgba(99,102,241,0.14), transparent 28%), radial-gradient(circle at 20% 80%, rgba(59,130,246,0.08), transparent 22%)',
+            "radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 22%), radial-gradient(circle at 80% 20%, rgba(99,102,241,0.14), transparent 28%), radial-gradient(circle at 20% 80%, rgba(59,130,246,0.08), transparent 22%)",
         }}
       />
       <div className="pointer-events-none absolute left-0 top-16 h-90 w-90 rounded-full bg-slate-700/20 blur-3xl" />
@@ -33,7 +33,7 @@ const AdminDashboard = () => {
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center gap-3">
+            {/* <div className="flex flex-wrap items-center justify-center gap-3">
               <button className="rounded-full bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10">
                 Admin Dashboard
               </button>
@@ -43,7 +43,7 @@ const AdminDashboard = () => {
               <button className="rounded-full bg-white/5 px-4 py-2 text-sm font-medium text-slate-100 transition hover:bg-white/10">
                 Nodes
               </button>
-            </div>
+            </div> */}
 
             <div className="flex flex-wrap items-center gap-3">
               <span className="inline-flex items-center rounded-full bg-emerald-500/10 px-4 py-2 text-sm font-semibold text-emerald-300 ring-1 ring-emerald-300/20">
@@ -54,8 +54,12 @@ const AdminDashboard = () => {
                   A
                 </div>
                 <div className="min-w-40 text-left">
-                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">Admin User</p>
-                  <p className="text-sm font-semibold text-white">{user?.email || "admin@test.com"}</p>
+                  <p className="text-xs uppercase tracking-[0.24em] text-slate-500">
+                    Admin User
+                  </p>
+                  <p className="text-sm font-semibold text-white">
+                    {user?.email || ""}
+                  </p>
                 </div>
                 <button
                   onClick={() => setShowChangePassword(true)}
@@ -106,7 +110,7 @@ const AdminDashboard = () => {
           </div>
         </section>
 
-        <section className="mb-10 grid gap-6 xl:grid-cols-[1.8fr_1fr]">
+        {/* <section className="mb-10 grid gap-6 xl:grid-cols-[1.8fr_1fr]">
           <div className="rounded-4xl bg-slate-900/80 p-8 ring-1 ring-white/10 shadow-2xl shadow-slate-950/30 backdrop-blur-xl">
             <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
               <div className="max-w-2xl">
@@ -209,7 +213,7 @@ const AdminDashboard = () => {
               </div>
             </div>
           </aside>
-        </section>
+        </section> */}
 
         <section>
           <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">

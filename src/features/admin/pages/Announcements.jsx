@@ -4,6 +4,7 @@ import AnnouncementFilters from "../components/AnnouncementFilters";
 import AnnouncementForm from "../components/AnnouncementForm";
 import AnnouncementPagination from "../components/AnnouncementPagination";
 import AnnouncementTable from "../components/AnnouncementTable";
+import AdminModal from '../components/AdminModal';
 import { announcementService } from "../services/announcementService";
 import { departmentService } from "../services/departmentService";
 
@@ -176,7 +177,7 @@ const Announcements = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -199,7 +200,7 @@ const Announcements = () => {
             <button
               onClick={handleAddNew}
               disabled={loading}
-              className="rounded-lg bg-cyan-600 px-6 py-3 font-semibold text-white transition hover:bg-cyan-700 disabled:opacity-50"
+              className="rounded-3xl bg-sky-400 px-6 py-3 font-semibold text-slate-900 transition hover:bg-sky-300 disabled:opacity-50"
             >
               + Create Announcement
             </button>
@@ -207,21 +208,21 @@ const Announcements = () => {
         </div>
 
         <div className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Visible Posts</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900">{announcements.length}</p>
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Visible Posts</p>
+            <p className="mt-2 text-3xl font-bold text-white">{announcements.length}</p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">All Company</p>
-            <p className="mt-2 text-3xl font-bold text-cyan-700">{summary.all}</p>
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">All Company</p>
+            <p className="mt-2 text-3xl font-bold text-sky-300">{summary.all}</p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Employees</p>
-            <p className="mt-2 text-3xl font-bold text-sky-700">{summary.employee}</p>
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Employees</p>
+            <p className="mt-2 text-3xl font-bold text-sky-400">{summary.employee}</p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Departments</p>
-            <p className="mt-2 text-3xl font-bold text-violet-700">{summary.department}</p>
+          <div className="rounded-3xl bg-slate-900/75 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Departments</p>
+            <p className="mt-2 text-3xl font-bold text-violet-400">{summary.department}</p>
           </div>
         </div>
 
@@ -239,13 +240,15 @@ const Announcements = () => {
 
         <div className="space-y-6">
           {isFormOpen ? (
-            <AnnouncementForm
-              departments={departments}
-              initialData={editingAnnouncement}
-              loading={saving}
-              onCancel={handleCancel}
-              onSubmit={handleSubmit}
-            />
+            <AdminModal isOpen={isFormOpen} onClose={handleCancel} title={editingAnnouncement ? 'Edit Announcement' : 'Create Announcement'}>
+              <AnnouncementForm
+                departments={departments}
+                initialData={editingAnnouncement}
+                loading={saving}
+                onCancel={handleCancel}
+                onSubmit={handleSubmit}
+              />
+            </AdminModal>
           ) : (
             <>
               <AnnouncementFilters

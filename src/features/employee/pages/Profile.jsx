@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ProfileView from '../components/ProfileView';
 import ProfileEdit from '../components/ProfileEdit';
+import AdminModal from '../../admin/components/AdminModal';
 import { employeeService } from '../services/employeeService';
 
 const Profile = () => {
@@ -78,17 +79,17 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
-          <p className="mt-4 text-gray-600 font-medium">Loading your profile...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-sky-300"></div>
+          <p className="mt-4 text-slate-300 font-medium">Loading your profile...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 sm:px-0">
           {/* Header with Back Button */}
@@ -146,12 +147,14 @@ const Profile = () => {
 
           {/* Profile Content */}
           {isEditing ? (
-            <ProfileEdit
-              employee={employee}
-              onSave={handleSaveProfile}
-              onCancel={handleCancel}
-              loading={saving}
-            />
+            <AdminModal isOpen={isEditing} onClose={handleCancel} title="Edit Profile">
+              <ProfileEdit
+                employee={employee}
+                onSave={handleSaveProfile}
+                onCancel={handleCancel}
+                loading={saving}
+              />
+            </AdminModal>
           ) : (
             <ProfileView
               employee={employee}

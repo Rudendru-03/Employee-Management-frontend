@@ -4,6 +4,7 @@ import UserForm from '../components/UserForm';
 import UserList from '../components/UserList';
 import EmployeeForm from '../components/EmployeeForm';
 import EmployeeList from '../components/EmployeeList';
+import AdminModal from '../components/AdminModal';
 import { userService, employeeService } from '../services/userService';
 import { departmentService } from '../services/departmentService';
 
@@ -120,7 +121,7 @@ const Employee = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 sm:px-0">
           {/* Header */}
@@ -210,26 +211,23 @@ const Employee = () => {
                       <button
                         onClick={() => setShowEmployeeForm(true)}
                         disabled={loading}
-                        className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium disabled:opacity-50"
+                        className="px-6 py-3 bg-sky-400 text-slate-900 rounded-3xl hover:bg-sky-300 transition font-semibold disabled:opacity-50"
                       >
                         + New Employee
                       </button>
                     </div>
                   )}
 
-                  {showEmployeeForm && (
-                    <div className="mb-8 bg-white rounded-lg shadow p-6">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New Employee</h2>
-                      <EmployeeForm
-                        onSubmit={handleCreateEmployee}
-                        onCancel={() => setShowEmployeeForm(false)}
-                        loading={saving}
-                        users={users}
-                        departments={departments}
-                        managers={managers}
-                      />
-                    </div>
-                  )}
+                  <AdminModal isOpen={showEmployeeForm} onClose={() => setShowEmployeeForm(false)} title="Create New Employee">
+                    <EmployeeForm
+                      onSubmit={handleCreateEmployee}
+                      onCancel={() => setShowEmployeeForm(false)}
+                      loading={saving}
+                      users={users}
+                      departments={departments}
+                      managers={managers}
+                    />
+                  </AdminModal>
 
                   <EmployeeList employees={employees} loading={saving} />
                 </div>
@@ -243,23 +241,16 @@ const Employee = () => {
                       <button
                         onClick={() => setShowUserForm(true)}
                         disabled={loading}
-                        className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium disabled:opacity-50"
+                        className="px-6 py-3 bg-sky-400 text-slate-900 rounded-3xl hover:bg-sky-300 transition font-semibold disabled:opacity-50"
                       >
                         + New User
                       </button>
                     </div>
                   )}
 
-                  {showUserForm && (
-                    <div className="mb-8 bg-white rounded-lg shadow p-6">
-                      <h2 className="text-2xl font-bold text-gray-900 mb-6">Create New User</h2>
-                      <UserForm
-                        onSubmit={handleCreateUser}
-                        onCancel={() => setShowUserForm(false)}
-                        loading={saving}
-                      />
-                    </div>
-                  )}
+                  <AdminModal isOpen={showUserForm} onClose={() => setShowUserForm(false)} title="Create New User">
+                    <UserForm onSubmit={handleCreateUser} onCancel={() => setShowUserForm(false)} loading={saving} />
+                  </AdminModal>
 
                   <UserList
                     users={users}

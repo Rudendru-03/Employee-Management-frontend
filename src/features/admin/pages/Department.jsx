@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DepartmentForm from '../components/DepartmentForm';
+import AdminModal from '../components/AdminModal';
 import DepartmentList from '../components/DepartmentList';
 import { departmentService } from '../services/departmentService';
 import { userService } from '../services/userService';
@@ -104,7 +105,7 @@ const Department = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="px-4 sm:px-0">
           {/* Header */}
@@ -126,7 +127,7 @@ const Department = () => {
               <button
                 onClick={handleAddNew}
                 disabled={loading}
-                className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium disabled:opacity-50"
+                className="px-6 py-3 bg-sky-400 text-slate-900 rounded-3xl hover:bg-sky-300 transition font-semibold disabled:opacity-50"
               >
                 + New Department
               </button>
@@ -173,18 +174,20 @@ const Department = () => {
             </div>
           ) : (
             <>
-              {/* Form Section */}
-              {isFormOpen && (
-                <div className="mb-8">
-                  <DepartmentForm
-                    onSubmit={handleFormSubmit}
-                    onCancel={handleCancel}
-                    loading={saving}
-                    initialData={editingDepartment}
-                    managers={managers}
-                  />
-                </div>
-              )}
+              {/* Form Section (modal) */}
+              <AdminModal
+                isOpen={isFormOpen}
+                onClose={handleCancel}
+                title={editingDepartment ? 'Edit Department' : 'New Department'}
+              >
+                <DepartmentForm
+                  onSubmit={handleFormSubmit}
+                  onCancel={handleCancel}
+                  loading={saving}
+                  initialData={editingDepartment}
+                  managers={managers}
+                />
+              </AdminModal>
 
               {/* List Section */}
               {!isFormOpen && (

@@ -110,11 +110,11 @@ const EmployeeAttendance = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <button
           onClick={() => navigate("/dashboard")}
-          className="mb-4 inline-flex items-center font-medium text-green-700 hover:text-green-900"
+          className="mb-4 inline-flex items-center font-medium text-sky-300 hover:text-sky-200"
         >
           <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -123,26 +123,26 @@ const EmployeeAttendance = () => {
         </button>
 
         <div className="mb-6">
-          <h1 className="text-4xl font-bold text-gray-900">My Attendance</h1>
-          <p className="mt-2 text-gray-600">Check your attendance records, timings, and status history.</p>
+          <h1 className="text-4xl font-bold text-white">My Attendance</h1>
+          <p className="mt-2 text-slate-300">Check your attendance records, timings, and status history.</p>
         </div>
 
         <div className="mb-6 grid gap-4 md:grid-cols-4">
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Visible Records</p>
-            <p className="mt-2 text-3xl font-bold text-gray-900">{records.length}</p>
+          <div className="rounded-3xl bg-slate-900/60 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Visible Records</p>
+            <p className="mt-2 text-3xl font-bold text-white">{records.length}</p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Present</p>
-            <p className="mt-2 text-3xl font-bold text-green-700">{summary.present}</p>
+          <div className="rounded-3xl bg-slate-900/60 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Present</p>
+            <p className="mt-2 text-3xl font-bold text-emerald-400">{summary.present}</p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Absent</p>
-            <p className="mt-2 text-3xl font-bold text-red-700">{summary.absent}</p>
+          <div className="rounded-3xl bg-slate-900/60 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Absent</p>
+            <p className="mt-2 text-3xl font-bold text-rose-400">{summary.absent}</p>
           </div>
-          <div className="rounded-lg bg-white p-5 shadow">
-            <p className="text-sm font-medium text-gray-500">Leave / Holiday</p>
-            <p className="mt-2 text-3xl font-bold text-amber-700">{summary.leave + summary.holiday}</p>
+          <div className="rounded-3xl bg-slate-900/60 p-5 shadow">
+            <p className="text-sm font-medium text-slate-400">Leave / Holiday</p>
+            <p className="mt-2 text-3xl font-bold text-amber-400">{summary.leave + summary.holiday}</p>
           </div>
         </div>
 
@@ -153,16 +153,16 @@ const EmployeeAttendance = () => {
         )}
 
         <div className="space-y-6">
-          <div className="rounded-lg bg-white p-5 shadow">
+          <div className="rounded-3xl bg-slate-900/60 p-5 shadow">
             <div className="grid gap-4 md:grid-cols-3">
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">Status</label>
+                <label className="mb-2 block text-sm font-medium text-slate-300">Status</label>
                 <select
                   name="status"
                   value={filters.status}
                   onChange={handleFilterChange}
                   disabled={loading}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 capitalize focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100"
+                  className="w-full rounded-lg border border-slate-700 px-4 py-2 capitalize bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400 disabled:opacity-50"
                 >
                   <option value="">All statuses</option>
                   <option value="present">Present</option>
@@ -172,14 +172,14 @@ const EmployeeAttendance = () => {
                 </select>
               </div>
               <div>
-                <label className="mb-2 block text-sm font-medium text-gray-700">Date</label>
+                <label className="mb-2 block text-sm font-medium text-slate-300">Date</label>
                 <input
                   type="date"
                   name="date"
                   value={filters.date}
                   onChange={handleFilterChange}
                   disabled={loading}
-                  className="w-full rounded-lg border border-gray-300 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 disabled:bg-gray-100"
+                  className="w-full rounded-lg border border-slate-700 px-4 py-2 bg-slate-800/60 text-slate-100 focus:outline-none focus:ring-2 focus:ring-sky-400 disabled:opacity-50"
                 />
               </div>
               <div className="flex items-end">
@@ -187,7 +187,7 @@ const EmployeeAttendance = () => {
                   type="button"
                   onClick={resetFilters}
                   disabled={loading}
-                  className="w-full rounded-lg bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-900 transition hover:bg-gray-300 disabled:opacity-50"
+                  className="w-full rounded-3xl bg-slate-800 px-4 py-2 text-sm font-semibold text-slate-200 transition hover:bg-slate-700 disabled:opacity-50"
                 >
                   Reset Filters
                 </button>
@@ -195,39 +195,39 @@ const EmployeeAttendance = () => {
             </div>
           </div>
 
-          {loading ? (
-            <div className="rounded-lg bg-white py-12 text-center shadow">
-              <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-green-600"></div>
-              <p className="mt-4 font-medium text-gray-600">Loading attendance...</p>
+              {loading ? (
+            <div className="rounded-3xl bg-slate-900/60 py-12 text-center shadow">
+              <div className="inline-block h-12 w-12 animate-spin rounded-full border-b-2 border-sky-300"></div>
+              <p className="mt-4 font-medium text-slate-300">Loading attendance...</p>
             </div>
           ) : records.length === 0 ? (
-            <div className="rounded-lg bg-white p-12 text-center shadow">
-              <h3 className="text-lg font-medium text-gray-900">No attendance records</h3>
-              <p className="mt-1 text-sm text-gray-500">Your attendance records will appear here once marked.</p>
+            <div className="rounded-3xl bg-slate-900/60 p-12 text-center shadow">
+              <h3 className="text-lg font-medium text-white">No attendance records</h3>
+              <p className="mt-1 text-sm text-slate-400">Your attendance records will appear here once marked.</p>
             </div>
           ) : (
             <>
-              <div className="overflow-hidden rounded-lg bg-white shadow">
+              <div className="overflow-hidden rounded-2xl bg-slate-900/50 shadow">
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                  <table className="min-w-full divide-y divide-slate-800">
+                    <thead className="bg-slate-800/50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Date</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Check In</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Check Out</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Hours</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">Status</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Date</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Check In</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Check Out</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Hours</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-slate-400">Status</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-gray-200 bg-white">
+                    <tbody className="divide-y divide-slate-800 bg-slate-900/40">
                       {records.map((record) => (
-                        <tr key={record._id} className="hover:bg-gray-50">
-                          <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-gray-900">{formatDate(record.date)}</td>
-                          <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">{formatTime(record.checkIn)}</td>
-                          <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">{formatTime(record.checkOut)}</td>
-                          <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">{getDuration(record.checkIn, record.checkOut)}</td>
+                        <tr key={record._id} className="hover:bg-slate-800/40">
+                          <td className="whitespace-nowrap px-6 py-4 text-sm font-medium text-white">{formatDate(record.date)}</td>
+                          <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-300">{formatTime(record.checkIn)}</td>
+                          <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-300">{formatTime(record.checkOut)}</td>
+                          <td className="whitespace-nowrap px-6 py-4 text-sm text-slate-300">{getDuration(record.checkIn, record.checkOut)}</td>
                           <td className="whitespace-nowrap px-6 py-4">
-                            <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold capitalize ${statusClasses[record.status] || "bg-gray-100 text-gray-800"}`}>
+                            <span className={`inline-flex rounded-full px-3 py-1 text-xs font-semibold capitalize ${statusClasses[record.status] || "bg-slate-700 text-slate-200"}`}>
                               {record.status}
                             </span>
                           </td>

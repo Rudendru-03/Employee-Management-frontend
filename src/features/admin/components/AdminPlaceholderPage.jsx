@@ -5,11 +5,11 @@ const AdminPlaceholderPage = ({ title, subtitle, hero, sections = [] }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-slate-100">
+    <div className="min-h-screen bg-slate-950 text-slate-100">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         <button
           onClick={() => navigate("/dashboard")}
-          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-indigo-700 transition hover:text-indigo-900"
+          className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-sky-300 transition hover:text-sky-200"
         >
           <svg
             className="h-5 w-5"
@@ -27,13 +27,13 @@ const AdminPlaceholderPage = ({ title, subtitle, hero, sections = [] }) => {
           Back to Dashboard
         </button>
 
-        <div className="mb-8 rounded-3xl bg-white p-8 shadow-sm ring-1 ring-slate-200">
-          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-indigo-600">
+        <div className="mb-8 rounded-3xl bg-slate-900/60 p-8 shadow-sm ring-1 ring-slate-800">
+          <p className="text-sm font-semibold uppercase tracking-[0.3em] text-sky-300">
             Admin Module
           </p>
-          <h1 className="mt-3 text-4xl font-bold text-slate-900">{title}</h1>
-          <p className="mt-3 max-w-3xl text-base text-slate-600">{subtitle}</p>
-          <div className="mt-6 rounded-2xl bg-indigo-50 p-5 text-sm leading-7 text-slate-700 ring-1 ring-indigo-100">
+          <h1 className="mt-3 text-4xl font-bold text-white">{title}</h1>
+          <p className="mt-3 max-w-3xl text-base text-slate-300">{subtitle}</p>
+          <div className="mt-6 rounded-2xl bg-slate-800/60 p-5 text-sm leading-7 text-slate-200 ring-1 ring-slate-700">
             {hero}
           </div>
         </div>
@@ -42,16 +42,16 @@ const AdminPlaceholderPage = ({ title, subtitle, hero, sections = [] }) => {
           {sections.map((section) => (
             <div
               key={section.title}
-              className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-slate-200"
+              className="rounded-3xl bg-slate-900/60 p-6 shadow-sm ring-1 ring-slate-800"
             >
-              <h2 className="text-xl font-semibold text-slate-900">
+              <h2 className="text-xl font-semibold text-white">
                 {section.title}
               </h2>
               <div className="mt-5 space-y-3">
                 {section.items.map((item) => (
                   <div
                     key={item}
-                    className="rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700"
+                    className="rounded-2xl border border-slate-800 bg-slate-800/50 px-4 py-3 text-sm text-slate-300"
                   >
                     {item}
                   </div>
