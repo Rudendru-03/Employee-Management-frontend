@@ -1,20 +1,32 @@
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
-import AdminDashboard from "./features/admin/pages/Dashboard";
-import Department from "./features/admin/pages/Department";
-import Employee from "./features/admin/pages/Employee";
-import Attendance from "./features/admin/pages/Attendance";
-import Announcements from "./features/admin/pages/Announcements";
-import LeaveManagement from "./features/admin/pages/LeaveManagement";
-import Payroll from "./features/admin/pages/Payroll";
-import Performance from "./features/admin/pages/Performance";
-import Recruitment from "./features/admin/pages/Recruitment";
-import ChangePasswordRequired from "./features/auth/pages/ChangePasswordRequired";
 import Login from "./features/auth/pages/Login";
-import EmployeeAttendance from "./features/employee/pages/Attendance";
-import EmployeeDashboard from "./features/employee/pages/Dashboard";
-import EmployeeLeave from "./features/employee/pages/Leave";
-import Profile from "./features/employee/pages/Profile";
+
+const ChangePasswordRequired = lazy(
+  () => import("./features/auth/pages/ChangePasswordRequired"),
+);
+const AdminDashboard = lazy(() => import("./features/admin/pages/Dashboard"));
+const Department = lazy(() => import("./features/admin/pages/Department"));
+const Employee = lazy(() => import("./features/admin/pages/Employee"));
+const Attendance = lazy(() => import("./features/admin/pages/Attendance"));
+const Announcements = lazy(
+  () => import("./features/admin/pages/Announcements"),
+);
+const LeaveManagement = lazy(
+  () => import("./features/admin/pages/LeaveManagement"),
+);
+const Payroll = lazy(() => import("./features/admin/pages/Payroll"));
+const Performance = lazy(() => import("./features/admin/pages/Performance"));
+const Recruitment = lazy(() => import("./features/admin/pages/Recruitment"));
+const EmployeeAttendance = lazy(
+  () => import("./features/employee/pages/Attendance"),
+);
+const EmployeeDashboard = lazy(
+  () => import("./features/employee/pages/Dashboard"),
+);
+const EmployeeLeave = lazy(() => import("./features/employee/pages/Leave"));
+const Profile = lazy(() => import("./features/employee/pages/Profile"));
 
 function App() {
   const { user, loading } = useAuth();
@@ -36,14 +48,22 @@ function App() {
       <Route
         path="/employee/profile"
         element={
-          user?.role === "employee" ? <Profile /> : <Navigate to="/dashboard" />
+          user?.role === "employee" ? (
+            <Suspense fallback={<div>Loading...</div>}>
+              <Profile />
+            </Suspense>
+          ) : (
+            <Navigate to="/dashboard" />
+          )
         }
       />
       <Route
         path="/employee/attendance"
         element={
           user?.role === "employee" ? (
-            <EmployeeAttendance />
+            <Suspense fallback={<div>Loading...</div>}>
+              <EmployeeAttendance />
+            </Suspense>
           ) : (
             <Navigate to="/dashboard" />
           )
@@ -53,7 +73,9 @@ function App() {
         path="/employee/leave"
         element={
           user?.role === "employee" ? (
-            <EmployeeLeave />
+            <Suspense fallback={<div>Loading...</div>}>
+              <EmployeeLeave />
+            </Suspense>
           ) : (
             <Navigate to="/dashboard" />
           )
@@ -62,26 +84,46 @@ function App() {
       <Route
         path="/admin/departments"
         element={
-          user?.role === "admin" ? <Department /> : <Navigate to="/dashboard" />
+          user?.role === "admin" ? (
+            <Suspense fallback={<div>Loading...</div>}>
+              <Department />
+            </Suspense>
+          ) : (
+            <Navigate to="/dashboard" />
+          )
         }
       />
       <Route
         path="/admin/employees"
         element={
-          user?.role === "admin" ? <Employee /> : <Navigate to="/dashboard" />
+          user?.role === "admin" ? (
+            <Suspense fallback={<div>Loading...</div>}>
+              <Employee />
+            </Suspense>
+          ) : (
+            <Navigate to="/dashboard" />
+          )
         }
       />
       <Route
         path="/admin/attendance"
         element={
-          user?.role === "admin" ? <Attendance /> : <Navigate to="/dashboard" />
+          user?.role === "admin" ? (
+            <Suspense fallback={<div>Loading...</div>}>
+              <Attendance />
+            </Suspense>
+          ) : (
+            <Navigate to="/dashboard" />
+          )
         }
       />
       <Route
         path="/admin/announcements"
         element={
           user?.role === "admin" ? (
-            <Announcements />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Announcements />
+            </Suspense>
           ) : (
             <Navigate to="/dashboard" />
           )
@@ -91,7 +133,9 @@ function App() {
         path="/admin/leave-management"
         element={
           user?.role === "admin" ? (
-            <LeaveManagement />
+            <Suspense fallback={<div>Loading...</div>}>
+              <LeaveManagement />
+            </Suspense>
           ) : (
             <Navigate to="/dashboard" />
           )
@@ -100,14 +144,22 @@ function App() {
       <Route
         path="/admin/payroll"
         element={
-          user?.role === "admin" ? <Payroll /> : <Navigate to="/dashboard" />
+          user?.role === "admin" ? (
+            <Suspense fallback={<div>Loading...</div>}>
+              <Payroll />
+            </Suspense>
+          ) : (
+            <Navigate to="/dashboard" />
+          )
         }
       />
       <Route
         path="/admin/performance"
         element={
           user?.role === "admin" ? (
-            <Performance />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Performance />
+            </Suspense>
           ) : (
             <Navigate to="/dashboard" />
           )
@@ -117,7 +169,9 @@ function App() {
         path="/admin/recruitment"
         element={
           user?.role === "admin" ? (
-            <Recruitment />
+            <Suspense fallback={<div>Loading...</div>}>
+              <Recruitment />
+            </Suspense>
           ) : (
             <Navigate to="/dashboard" />
           )
@@ -128,9 +182,13 @@ function App() {
         element={
           user ? (
             user.role === "admin" ? (
-              <AdminDashboard />
+              <Suspense fallback={<div>Loading...</div>}>
+                <AdminDashboard />
+              </Suspense>
             ) : (
-              <EmployeeDashboard />
+              <Suspense fallback={<div>Loading...</div>}>
+                <EmployeeDashboard />
+              </Suspense>
             )
           ) : (
             <Navigate to="/login" />
