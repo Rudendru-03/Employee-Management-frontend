@@ -8,7 +8,7 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState({});
   const [mustChangePassword, setMustChangePassword] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -40,21 +40,17 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await apiClient.post("/auth/login", { email, password });
       const { accessToken, mustChangePassword: mustChange } = response.data;
-      
+
       // Decode token to get email and role
       const decoded = JSON.parse(atob(accessToken.split(".")[1]));
-      
-      // Store token, email and role in localStorage
-      localStorage.setItem("accessToken", accessToken);
-      localStorage.setItem("email", decoded.email);
-      localStorage.setItem("role", decoded.role);
-      
-      setUser({ email: decoded.email, role: decoded.role });
+
+      setUser({ email: decoded.email, role: decoded.role, username: decoded.name, department: decoded.department });
       setMustChangePassword(mustChange || false);
-      
+
       return { success: true, mustChangePassword: mustChange || false };
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message || "Invalid credentials";
+      const errorMessage =
+        error.response?.data?.message || error.message || "Invalid credentials";
       throw new Error(errorMessage);
     }
   };
@@ -63,6 +59,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("accessToken");
     localStorage.removeItem("email");
     localStorage.removeItem("role");
+    localStorage.removeItem("username");
+    localStorage.removeItem("department");
     setUser(null);
     setMustChangePassword(false);
   };
@@ -83,7 +81,10 @@ export const AuthProvider = ({ children }) => {
       });
       setMustChangePassword(false);
     } catch (error) {
-      const errorMessage = error.response?.data?.message || error.message || "Failed to change password";
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Failed to change password";
       throw new Error(errorMessage);
     }
   };

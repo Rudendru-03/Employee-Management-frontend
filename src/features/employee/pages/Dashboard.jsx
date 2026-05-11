@@ -25,12 +25,12 @@ const EmployeeDashboard = () => {
               <button className="rounded-full bg-white/5 px-4 py-2 font-medium text-white shadow-sm shadow-slate-950/20">
                 Dashboard
               </button>
-              <button className="rounded-full px-4 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white">
+              {/* <button className="rounded-full px-4 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white">
                 Operations
               </button>
               <button className="rounded-full px-4 py-2 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white">
                 Intelligence
-              </button>
+              </button> */}
             </nav>
           </div>
 
@@ -48,7 +48,10 @@ const EmployeeDashboard = () => {
               Change Password
             </button>
             <button
-              onClick={() => { logout(); navigate("/login"); }}
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
               className="rounded-full bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-rose-600/20 transition hover:bg-rose-700"
             >
               Logout
@@ -76,9 +79,11 @@ const EmployeeDashboard = () => {
 
             <div className="mt-8 text-center">
               <div className="mx-auto mb-5 h-28 w-28 rounded-full border border-sky-400/20 bg-slate-950/80 ring-1 ring-slate-100/10" />
-              <h2 className="text-2xl font-semibold text-white">Alex Thorne</h2>
+              <h2 className="text-2xl font-semibold text-white">
+                {user?.username || "Employee"}
+              </h2>
               <p className="mt-2 text-xs uppercase tracking-[0.3em] text-sky-300">
-                Lead Systems Architect
+                {user?.role || "Employee"}
               </p>
             </div>
 
@@ -88,7 +93,7 @@ const EmployeeDashboard = () => {
                   Department
                 </p>
                 <p className="mt-2 font-medium text-white">
-                  Neural Infrastructure
+                  {user?.department || "N/A"}
                 </p>
               </div>
               <div className="rounded-3xl bg-slate-950/70 p-4 border border-white/5">
@@ -99,12 +104,12 @@ const EmployeeDashboard = () => {
                   {user?.email || "a.thorne@nexus.portal"}
                 </p>
               </div>
-              <div className="rounded-3xl bg-slate-950/70 p-4 border border-white/5">
+              {/* <div className="rounded-3xl bg-slate-950/70 p-4 border border-white/5">
                 <p className="uppercase tracking-[0.3em] text-slate-500">
                   Terminal
                 </p>
                 <p className="mt-2 font-medium text-white">Sector 7G - HQ</p>
-              </div>
+              </div> */}
             </div>
           </section>
 
