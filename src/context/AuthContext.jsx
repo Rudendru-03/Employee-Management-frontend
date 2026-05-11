@@ -43,6 +43,14 @@ export const AuthProvider = ({ children }) => {
 
       // Decode token to get email and role
       const decoded = JSON.parse(atob(accessToken.split(".")[1]));
+      // console.log("Decoded : ", decoded)
+
+      // Store token, email and role in localStorage
+      localStorage.setItem("accessToken", accessToken);
+      localStorage.setItem("email", decoded.email);
+      localStorage.setItem("role", decoded.role);
+      localStorage.setItem("username", decoded.name);
+      localStorage.setItem("department", decoded.department);
 
       setUser({ email: decoded.email, role: decoded.role, username: decoded.name, department: decoded.department });
       setMustChangePassword(mustChange || false);
